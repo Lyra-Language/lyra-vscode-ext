@@ -1,0 +1,25 @@
+{
+  "name": "lyra-vscode-ext",
+  "displayName": "Lyra",
+  "description": "The official vscode extension for the Lyra language.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.118.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "lyra",
+      "aliases": ["Lyra", "lyra"],
+      "extensions": [".lyra"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "lyra",
+      "scopeName": "source.lyra",
+      "path": "./syntaxes/lyra.tmLanguage.json"
+    }]
+  }
+}

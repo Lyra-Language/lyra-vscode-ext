@@ -1,0 +1,222 @@
+module std.io
+
+import std.collections.hashmap as hm
+import std.collections.{ Map, Set, HashMap }
+import std.collections.{ HashMap as HM, Set }
+
+const PI: f32 = 3.141592
+
+// Raw string examples
+const URL = `http:\\www.example.com`
+const SNIPPET = #`use the ` character`#
+const SNIPPET = ##`mix of ` and `# inside`##
+
+// Simple regex
+let phone = r/[2-9][0-9]{2} [2-9][0-9]{2} [0-9]{4}$/
+
+// Structs
+struct Point {
+  x: f32,
+  y: f32,
+}
+
+let origin = Point {
+  x: 0.0,
+  y: 0.0,
+}
+
+struct Point2<T> {
+  x: T,
+  y: T,
+}
+let int_point = Point2::<i32> { x: 123, y: 456 }
+let float_point = Point2::<f64> { x: 1.23, y: 4.56 }
+
+struct Person {
+  name: string,
+  age: i8 = 0,
+  hitpoints: i8 = 100,
+}
+
+struct Physics {
+  position: fixed<16,16>,
+  velocity: fixed<16,16>,
+}
+
+// Tuples
+tuple Coords(int, int, int)
+let coords = Coords (10, 20, 30)
+tuple Coords2<t>(t, t, t)
+let coords = Coords2::<i32> (10, 20, 30)
+
+tuple Point2D(int, int)
+let origin = Point2D(0, 0)
+
+tuple RGBA(u8, u8, u8, float = 1.0)
+let red = RGBA(255, 0, 0)
+let cyan = RGBA(0, 128, 128, 0.5)
+
+// Data types
+data ColorName = Red | Green | Blue
+
+data Maybe<T> = Some T | None
+
+data Result<T, E> = Ok T | Err E
+
+data Tree<t> = Nil | Leaf t | Node { left: Tree, value: t, right: Tree }
+
+data CSSColor =
+  | ColorName CSSColorName
+  | Hex HexStr
+  | RGB { r: i8, g: i8, b: i8 }
+  | HSL { hue: Hue, sat: float, light: float, alpha: Alpha }
+
+data Hue = HueDeg Angle | HueRadian Radian | HueTurn Turn
+
+// newtypes
+newtype Turn = float
+newtype CSSColorName = string where values("red", "green", "blue", "rebeccapurple", "aliceblue")
+newtype Status = int16 where values(200, 404, 500)
+newtype Angle = float where range(0..<360), precision(6, round_up)
+newtype Radian = f64 where range(0..=2*PI), precision(2, round_trunc)
+newtype Alpha = f32 where range(0..=1)
+newtype HexStr = string where pattern(r/^#(?:[0-9a-fA-F]{3}){1,2}$/)
+
+// Only multiples of 0.25 (for currency with quarter precision)
+newtype Quarter = float where range(0..=100), step(0.25)
+// Valid: 0, 0.25, 0.5, 0.75, 1.0, 1.25, ...
+
+// Degrees in 15° increments
+newtype CompassHeading = int where range(0..<360), step(15)
+// Valid: 0, 15, 30, 45, ..., 345
+
+/* This is a mult-line comment
+that spans a few lines. /* Here is
+some more text */ to fill up the lines */ let x = 42
+
+/// Adds two numbers together
+pub let add = pure (a: int, b: int) -> int => a + b
+
+if x == 3 {
+  println("x is 3")
+} else {
+  println("x is not 3")
+}
+
+// Pattern matching example
+let foo: Maybe<int> = Some(42)
+let bar = match foo {
+  Some 42 => "The Answer!",
+  Some _ => "Just some number",
+  None => "huh?",
+}
+
+// Array comprehension example
+let foo = [ x in 1..=5, y in 1..=5 | odd(x), even(y) | (x, y, x * y) ]
+
+// Async function example
+let fetch_data<t> = async (url: string) -> t => {
+  let result = await http.fetch(url)
+  return json.parse(result.data)
+}
+
+// Default parameter examples
+let greet = (name: string, prefix: string = "Hello") -> string => "${prefix} ${name}"
+
+let clamp = (value: int, min: int = 0, max: int = 100) -> int => value
+
+let process = (items: []string, config: Config = get_default_config()) -> void => {}
+
+// Function that returns a lambda
+let make_sum_fn = (a: int) -> (int) -> int => (b) => a + b
+
+// Function that takes a lambda as an argument
+let doubled = map::<int, int>([1, 2, 3], (x) => 2 * x)
+
+// Compose example
+let pipeline = parse ->> validate ->> serialize
+
+// Basic generator example
+let counter = gen (start: i32) -> Gen<i32> => {
+  var i = start
+  for {
+    yield i
+    i += 1
+  }
+}
+
+// Async generator example
+let stream = async gen (url: string) -> Gen<Packet> => {
+  let data = await fetch(url)
+  yield data
+}
+
+// Generator with filtering and transformation
+let pipeline = gen (items: []Item) -> Gen<Result> => {
+  yield from filter(items)
+  yield from transform(items)
+}
+
+// Given example
+let result = sqrt(a_sq + b_sq) given {
+  let a_sq = a * a
+  let b_sq = b * b
+}
+
+// Chained postfix example
+let foo = struct.method()[0].property
+
+// Recursive function example
+let fib = rec (n: i32, a: i32, b: i32) -> i32 {
+  (0, a, _) => a,
+  (n, a, b) => fib(n - 1, b, a + b)
+}
+
+// Immutable pointer
+let x: ^i32 = 0
+
+// Mutable pointer
+let y: ^mut i32 = 0
+
+// Pointer to Pointer type
+let x: ^^i32 = 0
+
+// Unsafe block example
+unsafe {
+  let ptr: ^mut i32 = 0
+  *ptr = 42
+}
+
+// Dereference example
+let v = ptr^.field
+
+// Trait
+trait Printable {
+  to_string: (Self) -> string,
+  print: (Self) -> Void = (self) => log(self.to_string())
+}
+trait Converter<from, to> {
+  convert: (from) -> to
+}
+
+impl Converter<string, int> for StringParser {
+  convert = (s) => parse_int(s)
+}
+
+impl Converter<int, string> for IntFormatter {
+  convert = (n) => int_to_string(n)
+}
+
+// Weak
+shared struct Node {
+  next: Maybe<Node>,
+  prev: weak Maybe<Node>
+}
+
+// Arena
+with Arena.new(megabytes(4)) {
+  let x = allocate(100)
+}
+with frame = Arena.new(megabytes(4)) {
+  let ptr = frame.alloc(1024)
+}

@@ -1,0 +1,322 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Lyra",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#attributes"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#storage-types"
+		},
+		{
+			"include": "#storage-modifiers"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#char-literals"
+		},
+		{
+			"include": "#raw-strings"
+		},
+		{
+			"include": "#regex-literals"
+		},
+		{
+			"include": "#numeric-literals"
+		},
+		{
+			"include": "#operators"
+		},
+		{
+			"include": "#type-names"
+		},
+		{
+			"include": "#function-parameters"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.line.documentation.lyra",
+					"match": "///.*$"
+				},
+				{
+					"name": "comment.line.double-slash.lyra",
+					"match": "//.*$"
+				},
+				{
+					"name": "comment.block.lyra",
+					"begin": "/\\*",
+					"end": "\\*/",
+					"patterns": [
+						{
+							"name": "comment.block.lyra",
+							"begin": "/\\*",
+							"end": "\\*/"
+						}
+					]
+				}
+			]
+		},
+		"attributes": {
+			"patterns": [
+				{
+					"match": "(@)([a-zA-Z_][a-zA-Z0-9_]*)",
+					"captures": {
+						"1": {
+							"name": "punctuation.definition.attribute.lyra"
+						},
+						"2": {
+							"name": "entity.other.attribute-name.lyra"
+						}
+					}
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.lyra",
+					"match": "\\b(if|else|for|in|match|return|break|continue|with|given)\\b"
+				},
+				{
+					"name": "keyword.control.import.lyra",
+					"match": "\\b(import|module|as)\\b"
+				},
+				{
+					"name": "keyword.other.lyra",
+					"match": "\\b(var|let|const|impl|trait|struct|data|tuple|newtype|where|async|await|yield|unsafe|pure|gen|rec)\\b"
+				}
+			]
+		},
+		"storage-types": {
+			"patterns": [
+				{
+					"name": "storage.type.lyra",
+					"match": "\\b(int|i8|i16|i32|i64|uint|u8|u16|u32|u64|float|f16|f32|f64|string|bool|fixed|Void)\\b"
+				}
+			]
+		},
+		"storage-modifiers": {
+			"patterns": [
+				{
+					"name": "storage.modifier.lyra",
+					"match": "\\b(stack|shared|weak|mut|ref|own|pub)\\b"
+				}
+			]
+		},
+		"constants": {
+			"patterns": [
+				{
+					"name": "constant.language.lyra",
+					"match": "\\b(true|false)\\b"
+				},
+				{
+					"name": "variable.language.lyra",
+					"match": "\\bSelf\\b"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.lyra",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.lyra",
+					"match": "\\\\(x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|[nrtfb\\\\\"'])"
+				},
+				{
+					"name": "meta.template.expression.lyra",
+					"begin": "\\${",
+					"end": "}",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.template-expression.begin.lyra"
+						}
+					},
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.template-expression.end.lyra"
+						}
+					},
+					"patterns": [
+						{
+							"include": "$self"
+						}
+					]
+				}
+			]
+		},
+		"char-literals": {
+			"name": "string.quoted.single.lyra",
+			"match": "'(\\\\(x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|[nrtfb\\\\\"'])|[^'\\\\])'"
+		},
+		"raw-strings": {
+			"patterns": [
+				{
+					"name": "string.quoted.other.lyra",
+					"begin": "##`",
+					"end": "`##"
+				},
+				{
+					"name": "string.quoted.other.lyra",
+					"begin": "#`",
+					"end": "`#"
+				},
+				{
+					"name": "string.quoted.other.lyra",
+					"begin": "`",
+					"end": "`"
+				}
+			]
+		},
+		"regex-literals": {
+			"name": "string.regexp.lyra",
+			"begin": "\\br/",
+			"end": "/"
+		},
+		"numeric-literals": {
+			"patterns": [
+				{
+					"name": "constant.numeric.hex.lyra",
+					"match": "\\b0[xX][0-9a-fA-F_]+\\b"
+				},
+				{
+					"name": "constant.numeric.binary.lyra",
+					"match": "\\b0[bB][01_]+\\b"
+				},
+				{
+					"name": "constant.numeric.octal.lyra",
+					"match": "\\b0[oO][0-7_]+\\b"
+				},
+				{
+					"name": "constant.numeric.float.lyra",
+					"match": "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?([eE][+-]?[0-9][0-9_]*)?\\b"
+				}
+			]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.operator.assignment.compound.lyra",
+					"match": "(%%=|\\+=|-=|\\*=|/=|%=)"
+				},
+				{
+					"name": "keyword.operator.spread.lyra",
+					"match": "\\.\\.\\."
+				},
+				{
+					"name": "keyword.operator.range.lyra",
+					"match": "\\.\\.(=)?"
+				},
+				{
+					"name": "keyword.operator.compose.lyra",
+					"match": "->>"
+				},
+				{
+					"name": "keyword.operator.nullcoalesce.lyra",
+					"match": "\\?\\?"
+				},
+				{
+					"name": "keyword.operator.optional.lyra",
+					"match": "\\?[.\\[]"
+				},
+				{
+					"name": "keyword.operator.try.lyra",
+					"match": "\\?"
+				},
+				{
+					"name": "keyword.operator.comparison.lyra",
+					"match": "(<=>|==|!=|<=|>=|<|>)"
+				},
+				{
+					"name": "keyword.operator.logical.lyra",
+					"match": "(&&|\\|\\||!)"
+				},
+				{
+					"name": "keyword.operator.arrow.lyra",
+					"match": "(->|=>)"
+				},
+				{
+					"name": "keyword.operator.address.lyra",
+					"match": "&"
+				},
+				{
+					"name": "keyword.operator.deref.lyra",
+					"match": "\\^"
+				},
+				{
+					"name": "keyword.operator.assignment.lyra",
+					"match": "(?<![=!<>-])=(?![=>])"
+				},
+				{
+					"name": "keyword.operator.arithmetic.lyra",
+					"match": "(%%|\\+|-|\\*|/|%)"
+				},
+				{
+					"name": "keyword.operator.lyra",
+					"match": "::"
+				}
+			]
+		},
+		"type-names": {
+			"patterns": [
+				{
+					"name": "entity.name.type.lyra",
+					"match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+				}
+			]
+		},
+		"function-parameters": {
+			"begin": "\\(",
+			"end": "\\)",
+			"patterns": [
+				{
+					"include": "#comments"
+				},
+				{
+					"include": "#storage-types"
+				},
+				{
+					"include": "#storage-modifiers"
+				},
+				{
+					"include": "#constants"
+				},
+				{
+					"include": "#strings"
+				},
+				{
+					"include": "#numeric-literals"
+				},
+				{
+					"include": "#operators"
+				},
+				{
+					"include": "#type-names"
+				},
+				{
+					"include": "#function-parameters"
+				},
+				{
+					"name": "variable.parameter.lyra",
+					"match": "\\b([a-z_][a-zA-Z0-9_]*)\\b(?=\\s*:)"
+				}
+			]
+		}
+	},
+	"scopeName": "source.lyra"
+}
