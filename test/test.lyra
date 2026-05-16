@@ -20,7 +20,7 @@ struct Point {
   y: f32,
 }
 
-let origin = Point {
+var origin = Point {
   x: 0.0,
   y: 0.0,
 }
@@ -45,12 +45,12 @@ struct Physics {
 
 // Tuples
 tuple Coords(int, int, int)
-let coords = Coords (10, 20, 30)
+var coords = Coords (10, 20, 30)
 tuple Coords2<t>(t, t, t)
-let coords = Coords2::<i32> (10, 20, 30)
+coords = Coords2::<i32> (10, 20, 30)
 
 tuple Point2D(int, int)
-let origin = Point2D(0, 0)
+origin = Point2D(0, 0)
 
 tuple RGBA(u8, u8, u8, float = 1.0)
 let red = RGBA(255, 0, 0)
@@ -104,7 +104,7 @@ if x == 3 {
 }
 
 // Pattern matching example
-let foo: Maybe<int> = Some(42)
+var foo: Maybe<int> = Some(42)
 let bar = match foo {
   Some 42 => "The Answer!",
   Some _ => "Just some number",
@@ -112,7 +112,7 @@ let bar = match foo {
 }
 
 // Array comprehension example
-let foo = [ x in 1..=5, y in 1..=5 | odd(x), even(y) | (x, y, x * y) ]
+foo = [ x in 1..=5, y in 1..=5 | odd(x), even(y) | (x, y, x * y) ]
 
 // Async function example
 let fetch_data<t> = async (url: string) -> t => {

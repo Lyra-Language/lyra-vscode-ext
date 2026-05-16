@@ -9,17 +9,50 @@
   "categories": [
     "Programming Languages"
   ],
+  "main": "./dist/extension",
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.118.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
   "contributes": {
-    "languages": [{
-      "id": "lyra",
-      "aliases": ["Lyra", "lyra"],
-      "extensions": [".lyra"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "lyra",
-      "scopeName": "source.lyra",
-      "path": "./syntaxes/lyra.tmLanguage.json"
-    }]
+    "languages": [
+      {
+        "id": "lyra",
+        "aliases": [
+          "Lyra",
+          "lyra"
+        ],
+        "extensions": [
+          ".lyra"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "lyra",
+        "scopeName": "source.lyra",
+        "path": "./syntaxes/lyra.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "Lyra",
+      "properties": {
+        "lyra.languageServerPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the lyra-lsp binary. Defaults to 'lyra-lsp' on PATH."
+        }
+      }
+    }
   }
 }
