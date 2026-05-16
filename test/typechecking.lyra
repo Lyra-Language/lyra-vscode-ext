@@ -1,0 +1,120 @@
+/**********************/
+/* Boolean expr tests */
+/**********************/
+let a = true // ok
+let b = false // ok
+let x = !3.1415 // error
+let y = "true" && true // error
+let z = true && 4
+
+/*************************/
+/* Comparison expr tests */
+/*************************/
+5 == 5 // ok
+5.0 == 5.0 // ok
+5 != 6 // ok
+5.0 != 6.0 // ok
+
+5 == 5.0 // error
+5.0 == 5 // error
+5 != 6.0 // error
+5.0 != 6 // error
+
+// ok
+let a2: i32 = 1
+let b2: i32 = 2
+a2 == b2
+
+// ok
+let a3: f64 = 1.0
+let b3: f64 = 2.0
+a3 == b3
+
+// ok
+let a4: i32 = 1
+a4 == 5
+
+// error
+let a5: i32 = 1
+let b5: i64 = 2
+a5 == b5
+
+// error
+let a6: i32 = 1
+let b6: f64 = 2.0
+a6 == b6
+
+true == false // ok
+"hello" == "world" // ok
+'a' == 'b' // ok
+"hello" == 5 // error
+true == 5 // error
+
+// ok
+let a7: i32 = 1
+let b7: i32 = 2
+a7 != b7
+
+true != false // ok
+
+// error
+let a8: i32 = 1
+let b8: i64 = 2
+a8 != b8
+
+6 > 5 // ok
+6 < 5.0 // ok
+
+// error
+let i: i32 = 6
+i < 5.0
+
+// error
+"a" > true
+
+/**************************/
+/* Math binary expr tests */
+/**************************/
+let x2: string = 1 + 2 // error
+let x3: int = 1 + 2.0 // error
+
+/**********************/
+/* Reassignment tests */
+/**********************/
+// error
+var x4: int = 1
+x4 = 3.14
+
+// error
+let x5: int = 1
+x5 = 2
+
+/***********************/
+/* String concat tests */
+/***********************/
+let str = "hello" ++ "world" // ok
+let s = "hello ${first}" ++ " ${last}" // ok
+
+// error
+let n: int = 42
+let s2 = n ++ " world"
+
+let x6: f64 = 3.14
+let y6: f16 = f16(x6)
+
+
+/***********************/
+/* Function call tests */
+/***********************/
+let add = (a: int, b: int) -> int => a + b // ok
+
+let greet = (name: string) -> string => "Hello, " ++ name // ok
+
+let bad = (x: int) -> string => x * 2 // error
+
+let bad2 = (x: int) -> int => "prefix" ++ "suffix" // error
+
+let greet = (name: string) -> string => "Hello, " ++ name
+let n2: int = 42
+greet(n2) // error
+

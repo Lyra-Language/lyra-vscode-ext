@@ -1,0 +1,32 @@
+// ok
+let outer = 10
+let result = { outer + 1 }
+
+let r = z + 1 // error
+let z = 5
+
+let x = x + 1 // error
+
+let result2 = {
+    let a = y // error
+    let y = 10
+    y
+}
+
+// ok
+let result3 = {
+    let y = 10
+    y
+}
+
+// ok
+let f = (x: i32, y: i32) -> i32 => x + y
+
+// ok
+let factorial = (n: i32) -> i32 => {
+    if n <= 1 {
+        1
+    } else {
+        n * factorial(n - 1)
+    }
+}

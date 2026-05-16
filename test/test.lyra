@@ -9,10 +9,16 @@ const PI: f32 = 3.141592
 // Raw string examples
 const URL = `http:\\www.example.com`
 const SNIPPET = #`use the ` character`#
-const SNIPPET = ##`mix of ` and `# inside`##
+const SNIPPET_2 = ##`mix of ` and `# inside`##
 
 // Simple regex
 let phone = r/[2-9][0-9]{2} [2-9][0-9]{2} [0-9]{4}$/
+
+let x = "true" && foo
+
+let a: i32 = 1
+let b: i32 = 2
+a == b
 
 // Structs
 struct Point {
@@ -134,7 +140,7 @@ let make_sum_fn = (a: int) -> (int) -> int => (b) => a + b
 let doubled = map::<int, int>([1, 2, 3], (x) => 2 * x)
 
 // Compose example
-let pipeline = parse ->> validate ->> serialize
+var pipeline = parse ->> validate ->> serialize
 
 // Basic generator example
 let counter = gen (start: i32) -> Gen<i32> => {
@@ -152,7 +158,7 @@ let stream = async gen (url: string) -> Gen<Packet> => {
 }
 
 // Generator with filtering and transformation
-let pipeline = gen (items: []Item) -> Gen<Result> => {
+pipeline = gen (items: []Item) -> Gen<Result> => {
   yield from filter(items)
   yield from transform(items)
 }
@@ -164,7 +170,7 @@ let result = sqrt(a_sq + b_sq) given {
 }
 
 // Chained postfix example
-let foo = struct.method()[0].property
+let something = MyStruct.method()[0].property
 
 // Recursive function example
 let fib = rec (n: i32, a: i32, b: i32) -> i32 {
@@ -173,7 +179,7 @@ let fib = rec (n: i32, a: i32, b: i32) -> i32 {
 }
 
 // Immutable pointer
-let x: ^i32 = 0
+let ptr: ^f64 = &1.0
 
 // Mutable pointer
 let y: ^mut i32 = 0
