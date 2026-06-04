@@ -31,9 +31,9 @@ var origin = Point {
   y: 0.0,
 }
 
-struct Point2<T> {
-  x: T,
-  y: T,
+struct Point2<t> {
+  x: t,
+  y: t,
 }
 let int_point = Point2::<i32> { x: 123, y: 456 }
 let float_point = Point2::<f64> { x: 1.23, y: 4.56 }
@@ -58,9 +58,9 @@ coords = Coords2::<i32> (10, 20, 30)
 tuple Point2D(int, int)
 origin = Point2D(0, 0)
 
-tuple RGBA(u8, u8, u8, float = 1.0)
-let red = RGBA(255, 0, 0)
-let cyan = RGBA(0, 128, 128, 0.5)
+tuple Rgba(u8, u8, u8, float = 1.0)
+let red = Rgba(255, 0, 0)
+let cyan = Rgba(0, 128, 128, 0.5)
 
 // Data types
 data ColorName = Red | Green | Blue
