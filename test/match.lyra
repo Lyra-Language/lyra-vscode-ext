@@ -1,0 +1,126 @@
+// Boolean match patterns
+let x: u8 = 200
+match x {
+    0..=200   => "ok",
+    150..=255 => "ok", // warn: this range overlaps with the previous one
+}
+
+// ok
+let flag = true
+match flag {
+    true  => "yes",
+    false => "no",
+}
+
+ let flag2 = true
+  match flag2 {
+    1 => "one", // error: mismatched types, expected `bool` but found `integer`
+    _ => "other",
+  }
+
+let flag3 = true
+match flag3 {
+    "true" => "yes", // error: mismatched types, expected `bool` but found `string`
+    _      => "no",
+}
+
+let flag4 = true
+match flag4 {
+    true => "yes",
+} // error: non-exhaustive patterns: `false` not covered (closed type: bool)
+
+let flag5 = true
+match flag5 {
+    true  => "yes",
+    x if x => "also yes",
+} // error: non-exhaustive patterns (closed type: bool)
+
+// Duplicate match patterns
+let x2 = 1
+match x2  {
+    1 => "first",
+    1 => "second", // warn: duplicate match pattern
+    _ => "other",
+}
+
+// ok: duplicate patterns are allowed if they are different due to guards
+let x3 = 1
+match x3 {
+    1 if true => "guarded",
+    1 => "unguarded",
+    _ => "other",
+}
+
+let x4: u8 = 50
+match x4 {
+    0..=100 => "low", // warn1: this range overlaps with the next one
+    50..=200 => "mid", // warn2: not exhaustive
+}
+
+let x5: u8 = 100
+match x5 {
+    0..=255 => "full",
+    n if n > 150 => "guarded", // ok: guarded arms are not considered for overlap or exhaustiveness
+}
+
+// Struct patterns with duplicate fields
+struct Person {
+  name: string,
+  age: i64,
+}
+
+let p = Person { name: "Alice", age: 30 }
+match p {
+    { name, age } => "ok",
+    _ => "other",
+}
+
+match p {
+    { name, email } => "ok", // error: field `email` does not exist on type `Person`
+    _ => "other",
+}
+
+match p {
+    42 => "ok", // error: mismatched types, expected `Person` but found `integer`
+    _ => "other",
+}
+
+match p {
+    { name } => "ok", // warn: non-exhaustive patterns: `age` not covered
+}
+
+// ok: the wildcard pattern `_` covers the missing field, so the match is exhaustive
+match p {
+    { name } => "ok",
+    _ => "other",
+}
+
+// Tuple patterns
+
+let tup = (1, "hello")
+
+// ok: the pattern `(x, y)` matches any tuple of two elements, so it is exhaustive
+match tup {
+    (x, y) => "ok",
+    _ => "other",
+}
+
+match tup {
+    (x, y, z) => "ok", // error: pattern has 3 fields but the value has 2 fields
+    _ => "other",
+}
+
+match tup {
+    42 => "ok", // error: mismatched types, expected `(int, string)` but found `integer`
+    _ => "other",
+}
+
+match tup { // warn: non-exhaustive patterns
+    (x, y) => "ok",
+}
+
+// ok
+match tup {
+    (x, y) => "ok",
+    _ => "other",
+}

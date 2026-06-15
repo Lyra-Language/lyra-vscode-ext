@@ -1,0 +1,10 @@
+let (x, y) = (1, "hello") // ok
+let (x, y, z) = (1, 2, 3) // ok
+let (x, ...rest) = (1, 2, 3) // ok
+let (...rest, x) = (1, 2, 3) // ok
+
+let (x, y) = (1, 2, 3) // error: too many values to unpack
+let (x, y, z) = (1, 2) // error: not enough values to unpack
+
+let (x, y) = 42 // error: cannot unpack non-tuple type
+let (x, y) = "hello" // error: cannot unpack non-tuple type

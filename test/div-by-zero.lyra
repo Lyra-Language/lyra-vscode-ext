@@ -1,0 +1,4 @@
+let x = 5 / 0 // error: division by zero is not allowed
+let y = 10 % 0 // error: modulus by zero is not allowed
+let z = 10 %% 0 // error: modulus by zero is not allowed
+let x2 = 5.0 / 0.0 // error: division by zero is not allowed

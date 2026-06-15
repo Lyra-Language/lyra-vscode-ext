@@ -1,0 +1,91 @@
+// error: missing the trait def for Ghost
+impl Ghost for i64 {
+    foo = (n) => n
+}
+
+// ok: the trait def for Show is present
+trait Show {
+    show: (Self) -> string
+}
+
+impl Show for i64 {
+    show = (n) => "x"
+}
+
+// error: duplicate definition of the Show trait
+trait Show {
+    describe: (Self) -> string
+}
+
+trait Show2 {
+    show: (Self) -> string,
+    describe: (Self) -> string
+}
+
+// error: missing the describe method for Show2
+impl Show2 for i64 {
+    show = (n) => "x"
+}
+
+
+trait Describable {
+    describe: (Self) -> string = (self) => "thing"
+}
+
+impl Describable for i64 {
+}
+
+trait Eq {
+    (_==_): (Self, Self) -> bool,
+    (_!=_): (Self, Self) -> bool
+}
+
+// error: missing the _!=_ method for Eq
+impl Eq for i64 {
+    (_==_) = (a, b) => true
+}
+
+trait Show3 {
+    show: (Self) -> string
+}
+
+impl Show3 for i64 {
+    show = (n) => "x",
+    extra = (n) => "y" // warn: extra method not declared in the trait
+}
+
+trait Show4 {
+    show: (Self) -> string
+}
+
+impl Show4 for i64 {
+    show = () => "x" // error: method show has the wrong type signature
+}
+
+trait Show5 {
+    show: (Self) -> string
+}
+
+impl Show5 for i64 {
+    show = (a, b) => "x" // error: method show has the wrong type signature
+}
+
+trait Show6 {
+    show: (Self) -> string,
+    show_twice: (Self) -> string = (x) => "twice"
+}
+
+// ok: the default method show_twice is not required to be implemented
+impl Show6 for i64 {
+    show = (n) => "x"
+}
+
+trait Collection {
+    add: (Self, i64) -> Self,
+    remove: (Self, i64) -> Self,
+    size: (Self) -> i64
+}
+
+// error: missing multiple methods for Collection
+impl Collection for i64 {
+}

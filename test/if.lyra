@@ -1,0 +1,11 @@
+if true { 1 } else { 2 } // warn: condition is always true
+if false { 1 } else { 2 } // warn: condition is always false
+if 1 > 0 { "positive" } else { "non-positive" } // ok: condition is not a constant expression
+if 1 < 0 { "negative" } else { "non-negative" } // ok: condition is not a constant expression
+
+let cond: bool = true
+if cond { 1 } else { 2 } // ok: condition is a variable, so it cannot be determined at compile time
+
+let cond2: bool = true
+if cond2 { 1 } else { "hello" } // ok: branches of if expression have different types, but it's not being used as an assignment expression
+let foo = if cond2 { 1 } else { "hello" } // error: branches of if expression must have the same type when acting as an assignment expression

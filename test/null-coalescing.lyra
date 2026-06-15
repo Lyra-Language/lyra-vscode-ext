@@ -1,0 +1,12 @@
+let lookup = (key: string) -> Maybe<i64> => { lookup(key) }
+
+let y: i64 = 1
+let z = lookup("a") ?? y // ok: `??` unwraps the Maybe<i64>, falling back to y when absent
+
+let s: string = "hello"
+let t = lookup("b") ?? s // error: payload i64 is incompatible with the default's string
+
+let x: i64 = 0
+let w = x ?? y // warning: x is never null — `??` requires a Maybe<T>, not any value
+
+let c = 42 ?? y // warning: an integer literal is never null

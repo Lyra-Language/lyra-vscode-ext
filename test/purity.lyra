@@ -1,0 +1,47 @@
+// Local mutation inside a pure function is fine — it never escapes.
+let sum = pure (n: i64) -> i64 => {
+    var acc = 0
+    for var i = 0; i < n; i += 1 {
+        acc += i
+    }
+    acc
+}
+
+// Reassigning a captured (outer-scope) binding from a pure function.
+var counter = 0
+let bump = pure (n: i64) -> i64 => {
+    counter = n // error: pure function reassigns captured binding "counter"
+    n
+}
+
+// Compound-assigning a captured binding.
+var total = 0
+let add = pure (n: i64) -> i64 => {
+    total += n // error: pure function mutates captured binding "total"
+    n
+}
+
+// Calling a known-impure builtin from a pure function.
+let shout = pure (msg: string) -> string => {
+    println(msg) // error: pure function calls impure function "println"
+    msg
+}
+
+// Calling a user-defined impure function from a pure one. `logIt` is inferred
+// impure (mutates outer `counter` and calls println), so the call propagates.
+let logIt = (msg: string) -> string => {
+    println(msg)
+    counter += 1
+    msg
+}
+let record = pure (msg: string) -> string => {
+    logIt(msg) // error: pure function calls impure function "logIt"
+    msg
+}
+
+// An impure (unmarked) function has no purity constraint — no diagnostics here.
+let bumpImpure = (n: i64) -> i64 => {
+    counter = n
+    println("bumped")
+    n
+}

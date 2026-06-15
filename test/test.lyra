@@ -3,6 +3,8 @@ module std.io
 import std.collections.hashmap as hm
 import std.collections.{ Map, Set, HashMap }
 import std.collections.{ HashMap as HM, Set }
+import std.net.http
+import std.{ json }
 
 const PI: f32 = 3.141592
 
@@ -11,6 +13,24 @@ const URL = `http:\\www.example.com`
 const SNIPPET = #`use the ` character`#
 const SNIPPET_2 = ##`mix of ` and `# inside`##
 
+
+let double = (x: i64, y: i64) -> i64 => {
+  return 2 * x
+}
+
+let counter = gen (start: i32) -> Gen<i32> => {
+  var i = start
+  for {
+    yield i
+    i += 1
+  }
+}
+
+let fetch_data<t> = async (url: string) -> t => {
+  let result = await http.fetch(url)
+  return json.parse(result.data)
+}
+
 // Simple regex
 let phone = r/[2-9][0-9]{2} [2-9][0-9]{2} [0-9]{4}$/
 
@@ -18,25 +38,28 @@ let x = "true" && foo
 
 let a: i32 = 1
 let b: i32 = 2
-a == b
 
 // Structs
 struct Point {
   x: f32,
   y: f32,
-}
-
-var origin = Point {
-  x: 0.0,
-  y: 0.0,
+  y: f32 = 0.0, // Default value
 }
 
 struct Point2<t> {
   x: t,
   y: t,
 }
+
+a == b
+
 let int_point = Point2::<i32> { x: 123, y: 456 }
 let float_point = Point2::<f64> { x: 1.23, y: 4.56 }
+
+let blah = (x: i64, y: i64) -> Point => {
+  let float_point: Point2<f32> = Point2 { x: f32(x), y: f32(y) }
+  Point { x: float_point.x, y: float_point.y }
+}
 
 struct Person {
   name: string,
@@ -50,15 +73,15 @@ struct Physics {
 }
 
 // Tuples
-tuple Coords(int, int, int)
+tuple Coords(i64, i64, i64)
 var coords = Coords (10, 20, 30)
 tuple Coords2<t>(t, t, t)
 coords = Coords2::<i32> (10, 20, 30)
 
-tuple Point2D(int, int)
+tuple Point2D(i64, i64)
 origin = Point2D(0, 0)
 
-tuple Rgba(u8, u8, u8, float = 1.0)
+tuple Rgba(u8, u8, u8, f64 = 1.0)
 let red = Rgba(255, 0, 0)
 let cyan = Rgba(0, 128, 128, 0.5)
 
@@ -71,29 +94,31 @@ data Result<T, E> = Ok T | Err E
 
 data Tree<t> = Nil | Leaf t | Node { left: Tree, value: t, right: Tree }
 
+print(int_point)
+
 data CSSColor =
   | ColorName CSSColorName
   | Hex HexStr
   | RGB { r: i8, g: i8, b: i8 }
-  | HSL { hue: Hue, sat: float, light: float, alpha: Alpha }
+  | HSL { hue: Hue, sat: f64, light: f64, alpha: Alpha }
 
 data Hue = HueDeg Angle | HueRadian Radian | HueTurn Turn
 
 // newtypes
-newtype Turn = float
+newtype Turn = f64
 newtype CSSColorName = string where values("red", "green", "blue", "rebeccapurple", "aliceblue")
 newtype Status = int16 where values(200, 404, 500)
-newtype Angle = float where range(0..<360), precision(6, round_up)
+newtype Angle = f64 where range(0..<360), precision(6, round_up)
 newtype Radian = f64 where range(0..=2*PI), precision(2, round_trunc)
 newtype Alpha = f32 where range(0..=1)
 newtype HexStr = string where pattern(r/^#(?:[0-9a-fA-F]{3}){1,2}$/)
 
 // Only multiples of 0.25 (for currency with quarter precision)
-newtype Quarter = float where range(0..=100), step(0.25)
+newtype Quarter = f64 where range(0..=100), step(0.25)
 // Valid: 0, 0.25, 0.5, 0.75, 1.0, 1.25, ...
 
 // Degrees in 15° increments
-newtype CompassHeading = int where range(0..<360), step(15)
+newtype CompassHeading = i64 where range(0..<360), step(15)
 // Valid: 0, 15, 30, 45, ..., 345
 
 /* This is a mult-line comment
@@ -101,16 +126,16 @@ that spans a few lines. /* Here is
 some more text */ to fill up the lines */ let x = 42
 
 /// Adds two numbers together
-pub let add = pure (a: int, b: int) -> int => a + b
+pub let add = pure (a: i64, b: i64) -> i64 => a + b
 
-if x == 3 {
-  println("x is 3")
+if x == true && foo {
+  fmt.println("x is 3")
 } else {
-  println("x is not 3")
+  fmt.println("x is not 3")
 }
 
 // Pattern matching example
-var foo: Maybe<int> = Some(42)
+var foo: Maybe<i64> = Some(42)
 let bar = match foo {
   Some 42 => "The Answer!",
   Some _ => "Just some number",
@@ -129,15 +154,15 @@ let fetch_data<t> = async (url: string) -> t => {
 // Default parameter examples
 let greet = (name: string, prefix: string = "Hello") -> string => "${prefix} ${name}"
 
-let clamp = (value: int, min: int = 0, max: int = 100) -> int => value
+let clamp = (value: i64, min: i64 = 0, max: i64 = 100) -> i64 => value
 
 let process = (items: []string, config: Config = get_default_config()) -> void => {}
 
 // Function that returns a lambda
-let make_sum_fn = (a: int) -> (int) -> int => (b) => a + b
+let make_sum_fn = (a: i64) -> (i64) -> i64 => (b) => a + b
 
 // Function that takes a lambda as an argument
-let doubled = map::<int, int>([1, 2, 3], (x) => 2 * x)
+let doubled = map::<i64, i64>([1, 2, 3], (x) => 2 * x)
 
 // Compose example
 var pipeline = parse ->> validate ->> serialize
@@ -205,11 +230,11 @@ trait Converter<from, to> {
   convert: (from) -> to
 }
 
-impl Converter<string, int> for StringParser {
+impl Converter<string, i64> for StringParser {
   convert = (s) => parse_int(s)
 }
 
-impl Converter<int, string> for IntFormatter {
+impl Converter<i64, string> for IntFormatter {
   convert = (n) => int_to_string(n)
 }
 
@@ -225,4 +250,9 @@ with Arena.new(megabytes(4)) {
 }
 with frame = Arena.new(megabytes(4)) {
   let ptr = frame.alloc(1024)
+}
+
+var origin = Point {
+  x: 0.0,
+  y: 0.0,
 }

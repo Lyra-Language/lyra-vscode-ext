@@ -1,0 +1,13 @@
+let done: bool = false
+for done == false { } // ok: using a boolean variable in the for loop condition
+
+for var i = 0; i < 10; i += 1 { } // ok: traditional for loop with initialization, condition, and increment
+
+let a: i64 = 1
+let b: bool = true
+for a && b { } // error: both operands of logical AND must be boolean
+
+let r: bool = true
+let s: string = "x"
+for r || s { } // error: both operands of logical OR must be boolean
+

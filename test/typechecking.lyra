@@ -76,17 +76,17 @@ i < 5.0
 /* Math binary expr tests */
 /**************************/
 let x2: string = 1 + 2 // error
-let x3: int = 1 + 2.0 // error
+let x3: i64 = 1 + 2.0 // error
 
 /**********************/
 /* Reassignment tests */
 /**********************/
 // error
-var x4: int = 1
+var x4: i64 = 1
 x4 = 3.14
 
 // error
-let x5: int = 1
+let x5: i64 = 1
 x5 = 2
 
 /***********************/
@@ -96,7 +96,7 @@ let str = "hello" ++ "world" // ok
 let s = "hello ${first}" ++ " ${last}" // ok
 
 // error
-let n: int = 42
+let n: i64 = 42
 let s2 = n ++ " world"
 
 let x6: f64 = 3.14
@@ -106,15 +106,15 @@ let y6: f16 = f16(x6)
 /***********************/
 /* Function call tests */
 /***********************/
-let add = (a: int, b: int) -> int => a + b // ok
+let add = (a: i64, b: i64) -> i64 => a + b // ok
 
 let greet = (name: string) -> string => "Hello, " ++ name // ok
 
-let bad = (x: int) -> string => x * 2 // error
+let bad = (x: i64) -> string => x * 2 // error
 
-let bad2 = (x: int) -> int => "prefix" ++ "suffix" // error
+let bad2 = (x: i64) -> i64 => "prefix" ++ "suffix" // error
 
 let greet = (name: string) -> string => "Hello, " ++ name
-let n2: int = 42
+let n2: i64 = 42
 greet(n2) // error
 
