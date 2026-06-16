@@ -1,0 +1,17 @@
+import foo.bar
+let x = 1
+x
+
+data Sign = Pos i32 | Neg i32 | Zero
+let s = Pos 1
+match s {
+    Pos x => 1,
+}
+
+struct Point { x: i64, y: i64 }
+let p = Point { x: 1 }
+
+let f = () -> i64 => {
+    let unused = 5
+    42
+}

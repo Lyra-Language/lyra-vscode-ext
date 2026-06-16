@@ -1,0 +1,33 @@
+// Raw-pointer operations and calls to `unsafe` functions must be wrapped in an
+// `unsafe { }` block or appear inside an `unsafe` function body.
+
+let x = 1
+
+// Taking a raw pointer outside unsafe — error.
+let p = &x // error: taking a raw pointer with `&` requires an `unsafe` block or function
+
+// Dereferencing a raw pointer outside unsafe — error.
+let v = p^ // error: dereferencing a raw pointer with `^` requires an `unsafe` block or function
+
+// The same operations inside an `unsafe` block are fine.
+unsafe {
+    let q = &x
+    let w = q^
+    q^ = 99
+}
+
+// An `unsafe` function body is itself an unsafe context — no diagnostics here.
+let load = unsafe (ptr: i64) -> i64 => {
+    ptr^
+}
+
+// Calling an `unsafe` function from a safe function requires `unsafe`.
+let useUnsafe = (n: i64) -> i64 => {
+    load(n) // error: calling unsafe function "load" requires an `unsafe` block or function
+}
+
+let useUnsafeOk = (n: i64) -> i64 => {
+    unsafe {
+        load(n)
+    }
+}

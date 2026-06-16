@@ -39,6 +39,21 @@ let record = pure (msg: string) -> string => {
     msg
 }
 
+// Mutating through a `mut`-borrowed parameter writes to the caller's value, so
+// it escapes a pure function. An `own` parameter is an owned local copy and may
+// be mutated freely.
+struct Point {
+    x: i64,
+    y: i64,
+}
+let reset = pure (p: mut Point) -> void => {
+    p.x = 0 // error: pure function mutates through `mut`-borrowed parameter "p"
+}
+let withX = pure (p: own Point, x: i64) -> Point => {
+    p.x = x // ok: `p` is owned locally, the mutation never escapes
+    p
+}
+
 // An impure (unmarked) function has no purity constraint — no diagnostics here.
 let bumpImpure = (n: i64) -> i64 => {
     counter = n
