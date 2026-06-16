@@ -1,0 +1,8 @@
+let x = 5
+
+let y = x + 1
+
+let f = (n: i32) -> i32 => {
+    let m = n
+    n
+}

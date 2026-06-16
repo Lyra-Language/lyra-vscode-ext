@@ -1,0 +1,10 @@
+const MAX = 10
+let a = 1
+var b = 2
+let f = (n: i32) -> i32 => { n }
+struct Point { x: i64, y: i64 }
+data Color = Red | Green | Blue
+let p = Point { x: a, y: b }
+let c = Red
+let q = p.x
+
