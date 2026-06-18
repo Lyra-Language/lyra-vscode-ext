@@ -1,0 +1,17 @@
+struct Point { x: i64, y: i64 }
+
+trait Show { show: (Self) -> string }
+
+let add = (a: i64, b: i64) -> i64 => a + b
+
+const MAX: i64 = 100
+
+struct Vec2 { x: i64, y: i64 }
+
+data Color = Red | Green | Blue
+
+trait Drawable { draw: (Self) -> string }
+
+let normalize = (v: Vec2) -> Vec2 => v
+
+const PI: f64 = 3.14159265

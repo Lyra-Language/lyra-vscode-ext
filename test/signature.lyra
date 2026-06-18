@@ -1,0 +1,3 @@
+let add = (x: i64, y: i64) -> i64 => x + y
+
+let foo = add(4, 3)

@@ -1,0 +1,15 @@
+	let foo = 5
+	let bar = foo
+	let baz = foo
+
+	let x = 1
+	let a = x
+	let f = () -> i32 => {
+		let x = 2
+		x
+	}
+
+	let f = (n: i32) -> i32 => {
+		let m = n
+		n
+	}
