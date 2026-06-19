@@ -1,4 +1,4 @@
-# lyra-vscode-ext — Project Context for Zed AI
+# lyra-vscode-ext — Project Context
 
 This is the official VS Code extension for the Lyra programming language. It is a thin LSP client wrapper — almost all language intelligence lives in the `lyra-lsp` binary from the sibling `lyra/` Go project.
 

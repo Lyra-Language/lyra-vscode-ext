@@ -3,7 +3,7 @@ let x = 1
 x
 
 data Sign = Pos i32 | Neg i32 | Zero
-let s = Pos 1
+let s = Pos(1)
 match s {
     Pos x => 1,
 }
