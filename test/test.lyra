@@ -53,8 +53,9 @@ struct Point2<t> {
 
 a == b
 
-let int_point = Point2::<i32> { x: 123, y: 456 }
-let float_point = Point2::<f64> { x: 1.23, y: 4.56 }
+// Generic args are inferred from the field values, so the turbofish is optional:
+let int_point = Point2 { x: 123, y: 456 }       // inferred Point2<i32>
+let float_point = Point2::<f64> { x: 1.23, y: 4.56 } // explicit turbofish still works
 
 let blah = (x: i64, y: i64) -> Point => {
   let float_point: Point2<f32> = Point2 { x: f32(x), y: f32(y) }
@@ -215,7 +216,7 @@ let x: ^^i32 = 0
 // Unsafe block example
 unsafe {
   let ptr: ^mut i32 = 0
-  *ptr = 42
+  ptr^ = 42
 }
 
 // Dereference example
