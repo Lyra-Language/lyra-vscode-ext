@@ -1,0 +1,84 @@
+// Demo fixture for the `det` / `noalloc` effect bounds (lyra-E015/E016) and the
+// interaction with `pure` (lyra-E007). `det` (deterministic) is coarser than
+// `pure`: it permits mutation, allocation, and output, but forbids the three
+// nondeterminism sources — external input, ambient randomness, and the clock —
+// so a `det` function is always reproducible from its inputs.
+
+// --- det: the three nondeterminism sources are forbidden -------------------
+
+// Drawing from the ambient global RNG is non-deterministic.
+let roll = det (sides: i64) -> i64 => {
+    Random.global() // error: `det` function draws from a random source
+}
+
+// Reading the ambient wall clock is non-deterministic.
+let stamp = det (n: i64) -> i64 => {
+    wallClock() // error: `det` function reads the system clock
+}
+
+// Reading external input is non-deterministic.
+let load = det (path: string) -> string => {
+    read(path) // error: `det` function reads external input
+}
+
+// --- det: the ambient-vs-threaded split ------------------------------------
+
+// A seed threaded in as a parameter is ordinary data, not an effect — so a
+// `det` function may derive pseudo-randomness from it (an LCG step) and stay
+// deterministic. Only the *ambient* Random.global()/wallClock() carry the bit.
+let next = det (seed: u64) -> u64 => {
+    seed * 6364136223846793005 + 1442695040888963407 // ok: reproducible from `seed`
+}
+
+// Output and local mutation are determinism-safe: a `det` sim step may log its
+// progress and mutate owned locals.
+let step = det (n: i64) -> i64 => {
+    println(n) // ok: output doesn't feed external state back in
+    var acc = 0
+    acc += n // ok: local mutation never escapes
+    acc
+}
+
+// --- noalloc: heap allocation is forbidden ---------------------------------
+
+shared struct Node {
+    v: i64,
+}
+
+// Constructing a `shared`-declared value heap-allocates.
+let make = noalloc (x: i64) -> i64 => {
+    let n = Node { v: x } // error: `noalloc` function heap-allocates a `shared` value
+    n.v
+}
+
+// A `shared` construction lexically inside a `with`-arena block is discharged,
+// so a `noalloc` function may build into an arena.
+let makeInArena = noalloc (x: i64) -> i64 => {
+    with Arena.new(bytes(64)) {
+        let n = Node { v: x } // ok: discharged by the arena
+        x
+    }
+}
+
+// `det noalloc` stacks the two orthogonal axes: this logs, mutates a local, and
+// allocates nothing non-deterministically — clean on both bounds.
+let update = det noalloc (n: i64) -> i64 => {
+    println(n)
+    var acc = n
+    acc += 1
+    acc
+}
+
+// --- interaction with pure -------------------------------------------------
+
+// Ambient randomness breaks `pure` too (it forbids ALL of these effects), but
+// via the fine-grained per-op walk (lyra-E007) rather than the E016 bound.
+let purelyRandom = pure (n: i64) -> i64 => {
+    Random.global() // error: pure function calls impure function "Random.global"
+}
+
+// `pure` and `det` are two rungs of the same correctness axis (pure ⊆ det), so
+// annotating both is contradictory (lyra-E015).
+let both = pure det (n: i64) -> i64 => { // error: function is both `pure` and `det`
+    n
+}
