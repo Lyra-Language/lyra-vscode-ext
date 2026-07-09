@@ -1,65 +1,57 @@
-# lyra-vscode-ext README
+# Lyra for VS Code
 
-This is the README for your extension "lyra-vscode-ext". After writing up a brief description, we recommend including the following sections.
+The official Visual Studio Code extension for the [Lyra](../lyra) programming
+language. It provides syntax highlighting and connects the editor to the Lyra
+language server for rich language features.
+
+> **Status:** pre-release (v0.0.1), tracking the language as it evolves.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Syntax highlighting** for `.lyra` files (TextMate grammar in
+  `syntaxes/lyra.tmLanguage.json`), plus bracket matching, comment toggling, and
+  auto-closing pairs (`language-configuration.json`).
+- **Language server features** via the `lyra-lsp` binary: completion, hover,
+  go-to-definition, find references, rename, semantic tokens, folding ranges,
+  inlay hints, document/workspace symbols, signature help, and diagnostics.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+The extension itself is a thin LSP client — almost all language intelligence
+lives in `lyra-lsp`, built from the sibling [`lyra/`](../lyra) Go project.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+You need the **`lyra-lsp`** binary. Build it from the Go project:
 
-## Extension Settings
+```bash
+cd ../lyra
+go build ./cmd/lyra-lsp
+```
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Then either put the resulting `lyra-lsp` on your `$PATH`, or point the extension
+at it with the setting below.
 
-For example:
+## Extension settings
 
-This extension contributes the following settings:
+| Setting | Default | Description |
+|---|---|---|
+| `lyra.languageServerPath` | `""` (→ `lyra-lsp` on `$PATH`) | Absolute path to the `lyra-lsp` binary |
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+## Developing
 
-## Known Issues
+```bash
+npm install
+npm run compile      # one-shot TypeScript build → dist/
+npm run watch        # rebuild on change
+```
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+To try it out, open this folder in VS Code and press **F5** to launch an
+Extension Development Host with the extension loaded. Open a `.lyra` file; make
+sure `lyra-lsp` is on your `$PATH` or configured via `lyra.languageServerPath`.
 
-## Release Notes
+The entire extension is `src/extension.ts` (`activate` spawns the language server
+over stdio and registers the client for the `lyra` language). See
+[`CLAUDE.md`](CLAUDE.md) for more detail.
 
-Users appreciate release notes as you update your extension.
+## License
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+[MIT](LICENSE) © Avram Eisner
