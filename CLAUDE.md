@@ -70,3 +70,21 @@ To test the extension locally, press **F5** in VS Code with this folder open (la
 
 - **`lyra/`** (Go) — builds the `lyra-lsp` binary this extension spawns. After changing the Go code, rebuild with `go build ./cmd/lyra-lsp` and ensure the binary is on `$PATH` or pointed to by the setting.
 - **`tree-sitter-lyra/`** — the grammar used by the Go parser. No direct dependency from this extension; syntax highlighting uses the separate TextMate grammar.
+
+## Server path resolution
+
+`lyra.languageServerPath` supports **`${workspaceFolder}`**, expanded by the extension
+itself (`expandWorkspaceFolder`). VS Code substitutes that variable in tasks and launch
+configs but *not* in arbitrary extension settings, so without this the only workable
+value is an absolute path — and `lyra.code-workspace` is checked in, so a hardcoded
+`/Users/<someone>/...` is wrong for everyone else who opens it.
+
+This is a **multi-root** workspace (compiler, extension, grammar, site), so
+`${workspaceFolder}` is genuinely ambiguous. Rather than inventing a rule about which
+folder wins, each is tried and the first whose expansion exists on disk is used — a path
+that resolves is the one that was meant. When none exist, the first folder's expansion is
+returned so the error names a real path rather than an unexpanded variable.
+
+The workspace ships `${workspaceFolder}/build/lyra-lsp`, which is what the compiler
+repo's `./build.sh` produces (binaries in `build/`, with `std` beside them so `lyrac`
+finds the standard library). An empty setting still falls back to `lyra-lsp` on `PATH`.

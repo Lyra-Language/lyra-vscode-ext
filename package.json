@@ -50,7 +50,7 @@
         "lyra.languageServerPath": {
           "type": "string",
           "default": "",
-          "description": "Path to the lyra-lsp binary. Defaults to 'lyra-lsp' on PATH."
+          "description": "Path to the lyra-lsp binary. Supports ${workspaceFolder}, which expands to the workspace folder in which the path exists (this is a multi-root workspace). Defaults to 'lyra-lsp' on PATH. `./build.sh` in the compiler repo produces build/lyra-lsp."
         }
       }
     }
