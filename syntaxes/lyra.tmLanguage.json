@@ -43,9 +43,21 @@
 		},
 		{
 			"include": "#function-parameters"
+		},
+		{
+			"include": "#punctuation"
 		}
 	],
 	"repository": {
+		"punctuation": {
+			"patterns": [
+				{
+					"comment": "The statement separator. A line break is the ordinary terminator in Lyra; `;` is the explicit form, for putting several statements on one line. The same token also separates the clauses of a C-style `for i = 0; i < n; i += 1` and the parts of an array repeat `[value; count]` — one scope for all three, as C and JavaScript grammars do.",
+					"name": "punctuation.terminator.statement.lyra",
+					"match": ";"
+				}
+			]
+		},
 		"comments": {
 			"patterns": [
 				{
@@ -98,6 +110,11 @@
 				{
 					"name": "keyword.other.lyra",
 					"match": "\\b(var|let|const|impl|trait|struct|data|tuple|newtype|where|async|await|yield|unsafe|pure|gen|rec)\\b"
+				},
+				{
+					"comment": "The `type` of a type alias (`type Op = ((i64, i64)) -> i64`). Kept out of the list above and gated on a following PascalCase name because `type` is NOT reserved in Lyra — the tree-sitter grammar makes it a keyword only in this position, so `let type = 5` is a legal binding and must not be painted as a keyword. An alias always names an uppercase type, so the lookahead separates the two with no false positives.",
+					"name": "keyword.other.type.lyra",
+					"match": "\\btype\\b(?=\\s+[A-Z])"
 				}
 			]
 		},

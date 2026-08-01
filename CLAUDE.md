@@ -7,6 +7,7 @@ This is the official VS Code extension for the Lyra programming language. It is 
 ```
 src/extension.ts          — the entire extension (activate/deactivate)
 syntaxes/lyra.tmLanguage.json  — TextMate grammar for syntax highlighting
+test/*.lyra               — sample files for eyeballing highlighting and LSP behaviour
 language-configuration.json    — bracket pairs, comment tokens, auto-close rules
 dist/                     — compiled output (tsc → JS, gitignored)
 ```
@@ -42,6 +43,8 @@ TextMate grammar — not generated from tree-sitter. Covers:
 - Comments: `//`, `///` (doc), `/* */` (nested)
 - Attributes: `@name`, `@name(args)`
 - Keywords: `if`, `else`, `for`, `match`, `return`, `break`, `continue`, `with`, `given`, `import`, `module`, `as`, `var`, `let`, `const`, `impl`, `trait`, `struct`, `data`, `tuple`, `newtype`, `where`, `async`, `await`, `yield`, `unsafe`, `pure`, `gen`, `rec`
+- `type` (type aliases) — **matched only when followed by a PascalCase name.** `type` is not reserved in Lyra; the tree-sitter grammar makes it a keyword only in declaration position, so `let type = 5` is a legal binding and a bare `\btype\b` would paint it as a keyword. The lookahead is what separates the two.
+- Punctuation: `;`, the explicit statement separator (a line break is the ordinary one). Also the separator inside a C-style `for` and an array repeat `[value; count]` — one scope for all three, as C and JavaScript grammars do.
 - Storage types: `int`, `i8`–`i64`, `uint`, `u8`–`u64`, `f16`/`f32`/`f64`, `string`, `bool`, `fixed`
 - Storage modifiers: `stack`, `shared`, `weak`, `mut`, `ref`, `own`, `pub`
 - Operators: arithmetic, comparison, logical, range (`..`, `..=`), compose (`->>`), null-coalesce (`??`), try (`?`), deref (`^`), address-of (`&`)

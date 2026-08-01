@@ -1,0 +1,36 @@
+// Highlighting check for the two 07/31 syntax additions. Open in VS Code and eyeball;
+// there is no automated grammar test.
+
+// `type` is a keyword here, and colours like `newtype` below it.
+type Op = ((i64, i64)) -> i64
+pub type Id = i64
+type Point = Pt
+
+newtype Volume = u8 where range(0..=100) // `type` inside `newtype` must NOT colour
+
+struct Pt { x: i64, y: i64 }
+
+// `type` is NOT reserved: each of these is an ordinary identifier and must stay
+// plain, which is why the keyword rule requires a following PascalCase name.
+let type = 5
+let other = type
+let shown = u8(type)
+
+let apply = (g: Op, p: (i64, i64)) -> i64 => g(p)
+
+let main = () -> u8 => {
+  // `;` is the explicit statement separator; a line break is the ordinary one.
+  let a = 1; let b = 2
+  let p = Pt { x: 3, y: 4 }
+
+  // The same token in a C-style `for` and in an array repeat.
+  for var i = 0; i < 3; i += 1 {
+    print("${i}")
+  }
+  // note: `[value; count]` parses and highlights, but does not type-check yet
+  // ("unknown expression type ArrayRepeatExpr") — kept so the `;` in an array
+  // repeat is visible here, since that is one of the three places it appears.
+  let zeros = [0; 4]
+
+  u8(apply(((x, y)) => x * y, (a, b)) + p.x)
+}
