@@ -2,7 +2,7 @@
   "name": "lyra-vscode-ext",
   "displayName": "Lyra",
   "description": "The official vscode extension for the Lyra language.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.118.0"
   },
