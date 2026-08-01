@@ -33,6 +33,10 @@ everything the extension does is listed here rather than split across releases.
   = 5` is a legal binding and must not be coloured as a keyword.
 - Sample `.lyra` files under `test/`, for exercising the language server and for eyeballing
   highlighting. There is no automated test suite yet.
+- Packaging metadata required to publish: `publisher` (`Lyra-Language`, making the
+  extension id `Lyra-Language.lyra-vscode-ext`), `repository`, and the `license` field to
+  match the MIT LICENSE already in the repo. `vsce` refuses to package without a
+  publisher, so until now the extension could be run from source but never shipped.
 
 ### Fixed
 

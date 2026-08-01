@@ -3,6 +3,12 @@
   "displayName": "Lyra",
   "description": "The official vscode extension for the Lyra language.",
   "version": "0.1.0",
+  "publisher": "Lyra-Language",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lyra-Language/lyra-vscode-ext.git"
+  },
   "engines": {
     "vscode": "^1.118.0"
   },
