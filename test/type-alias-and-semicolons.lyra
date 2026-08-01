@@ -34,3 +34,10 @@ let main = () -> u8 => {
 
   u8(apply(((x, y)) => x * y, (a, b)) + p.x)
 }
+
+// The two drift fixes, also worth eyeballing.
+let widths: i128 = 0        // i128/u128/rune/void are types; `int`/`uint`/`float` are not
+let ch: rune = 'a'
+let re = r"\d+"             // a regex literal is r"…" now
+let ratio = 8 / 2 + 4 / 2   // …so plain division must stay plain, not become a string
+let notARegex = r"https://example"

@@ -45,12 +45,12 @@ TextMate grammar — not generated from tree-sitter. Covers:
 - Keywords: `if`, `else`, `for`, `match`, `return`, `break`, `continue`, `with`, `given`, `import`, `module`, `as`, `var`, `let`, `const`, `impl`, `trait`, `struct`, `data`, `tuple`, `newtype`, `where`, `async`, `await`, `yield`, `unsafe`, `pure`, `gen`, `rec`
 - `type` (type aliases) — **matched only when followed by a PascalCase name.** `type` is not reserved in Lyra; the tree-sitter grammar makes it a keyword only in declaration position, so `let type = 5` is a legal binding and a bare `\btype\b` would paint it as a keyword. The lookahead is what separates the two.
 - Punctuation: `;`, the explicit statement separator (a line break is the ordinary one). Also the separator inside a C-style `for` and an array repeat `[value; count]` — one scope for all three, as C and JavaScript grammars do.
-- Storage types: `int`, `i8`–`i64`, `uint`, `u8`–`u64`, `f16`/`f32`/`f64`, `string`, `bool`, `fixed`
+- Storage types: `i8`–`i128`, `u8`–`u128`, `f16`/`f32`/`f64`, `string`, `bool`, `rune`, `fixed`, `void`. Kept in step with tree-sitter-lyra's `_primitive_type`: `int`/`uint` are gone (the language dropped platform-dependent widths for determinism), `float` was never a keyword, `Void` is spelled lowercase, and `never` — the bottom type — is compiler-internal with no syntax, so it is deliberately absent.
 - Storage modifiers: `stack`, `shared`, `weak`, `mut`, `ref`, `own`, `pub`
 - Operators: arithmetic, comparison, logical, range (`..`, `..=`), compose (`->>`), null-coalesce (`??`), try (`?`), deref (`^`), address-of (`&`)
 - String interpolation: `${...}` inside double-quoted strings
 - Raw strings: backtick variants (`` ` ``, `` #` ``, `` ##` ``)
-- Regex literals: `r/pattern/`
+- Regex literals: `r"pattern"`. A single line-bounded `match`, not begin/end, so an unterminated literal degrades to a stray identifier instead of swallowing the file. This rule matched `r/…/` until 07/31, long after the language moved off it on 07/29 — and it was not merely stale but *wrong*: `let ratio = r/2 + a/b` painted a string from `r/` to the next `/`, reproducing in the editor the exact ambiguity the language change removed.
 - Numeric literals: decimal, hex (`0x`), binary (`0b`), octal (`0o`)
 - Type names: any `PascalCase` identifier
 

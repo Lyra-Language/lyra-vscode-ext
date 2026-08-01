@@ -121,8 +121,9 @@
 		"storage-types": {
 			"patterns": [
 				{
+					"comment": "The writable primitive types, from tree-sitter-lyra's _primitive_type. Removed 07/31: `int`/`uint`, which the language dropped for determinism (a platform-dependent width defeats the point), `float`, which is not a keyword — the sized f16/f32/f64 are — and `Void`, which is spelled lowercase. Added: i128/u128 and `rune`. Deliberately absent: `never`, the bottom type, which is compiler-internal and has no syntax to highlight.",
 					"name": "storage.type.lyra",
-					"match": "\\b(int|i8|i16|i32|i64|uint|u8|u16|u32|u64|float|f16|f32|f64|string|bool|fixed|Void)\\b"
+					"match": "\\b(i8|i16|i32|i64|i128|u8|u16|u32|u64|u128|f16|f32|f64|string|bool|rune|fixed|void)\\b"
 				}
 			]
 		},
@@ -201,9 +202,9 @@
 			]
 		},
 		"regex-literals": {
+			"comment": "A regex literal is `r\"…\"` (tree-sitter-lyra's regex_literal). It was `r/…/` until 07/29, and this rule kept matching that long after: `let ratio = r/2 + a/b` painted a string from `r/` to the next `/`, which is exactly the lexical ambiguity the language change removed — a slash-delimited form cannot be told from division without arbitrarily distant context. A single `match` rather than begin/end, so the scope is bounded to one line: an unterminated literal must degrade to a stray identifier, never swallow the rest of the file. The alternation is the standard escape-aware string body, so `\\\"` does not end it.",
 			"name": "string.regexp.lyra",
-			"begin": "\\br/",
-			"end": "/"
+			"match": "\\br\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""
 		},
 		"numeric-literals": {
 			"patterns": [
