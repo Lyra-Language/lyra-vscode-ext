@@ -230,7 +230,7 @@
 			"patterns": [
 				{
 					"name": "keyword.operator.assignment.compound.lyra",
-					"match": "(%%=|\\+=|-=|\\*=|/=|%=)"
+					"match": "(%%=|<<=|>>=|\\+=|-=|\\*=|/=|%=|&=|\\|=|~=)"
 				},
 				{
 					"name": "keyword.operator.spread.lyra",
@@ -263,6 +263,11 @@
 				{
 					"name": "keyword.operator.logical.lyra",
 					"match": "(&&|\\|\\||!)"
+				},
+				{
+					"comment": "Bitwise and shift. After the logical rule so && and || win, and before any single < / > so the shifts are not split. Bitwise & is left to the address-of rule below — same character, and both render as an operator. Xor is ~, which doubles as the prefix complement.",
+					"name": "keyword.operator.bitwise.lyra",
+					"match": "(<<|>>|\\||~)"
 				},
 				{
 					"name": "keyword.operator.arrow.lyra",
