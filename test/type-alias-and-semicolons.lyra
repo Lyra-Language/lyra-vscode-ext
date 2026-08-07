@@ -6,7 +6,7 @@ type Op = ((i64, i64)) -> i64
 pub type Id = i64
 type Point = Pt
 
-newtype Volume = u8 where range(0..=100) // `type` inside `newtype` must NOT colour
+newtype Volume = u8 where range(0..<=100) // `type` inside `newtype` must NOT colour
 
 struct Pt { x: i64, y: i64 }
 

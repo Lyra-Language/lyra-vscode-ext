@@ -1,8 +1,8 @@
 // Boolean match patterns
 let x: u8 = 200
 match x {
-    0..=200   => "ok",
-    150..=255 => "ok", // warn: this range overlaps with the previous one
+    0..<=200   => "ok",
+    150..<=255 => "ok", // warn: this range overlaps with the previous one
 }
 
 // ok
@@ -53,13 +53,13 @@ match x3 {
 
 let x4: u8 = 50
 match x4 {
-    0..=100 => "low", // warn1: this range overlaps with the next one
-    50..=200 => "mid", // warn2: not exhaustive
+    0..<=100 => "low", // warn1: this range overlaps with the next one
+    50..<=200 => "mid", // warn2: not exhaustive
 }
 
 let x5: u8 = 100
 match x5 {
-    0..=255 => "full",
+    0..<=255 => "full",
     n if n > 150 => "guarded", // ok: guarded arms are not considered for overlap or exhaustiveness
 }
 

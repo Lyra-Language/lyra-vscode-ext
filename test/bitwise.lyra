@@ -1,0 +1,35 @@
+// Bitwise and shift highlighting. The thing to eyeball: `<<` and `>>` paint as
+// ONE shift operator, not as two comparisons — the reason the shift rule sits
+// ahead of the comparison rule in syntaxes/lyra.tmLanguage.json.
+
+let flags: u8 = 0b1010
+let mask: u8 = 0b0110
+
+let and_ = flags & mask   // & shares the address-of rule; both are operators
+let or_ = flags | mask
+let xor = flags ~ mask    // xor is ~, not ^ — ^ is taken by pointers and deref
+let not_ = ~flags         // the same token in prefix position: complement
+
+let up = flags << 2       // one shift operator, not `<` `<`
+let down = flags >> 2
+
+// Bitwise binds tighter than comparison here, unlike C, so this groups the way
+// it reads. Highlighting has no opinion on precedence, but the line is worth
+// having: it is `&` next to `==` on one line.
+let masked = flags & mask == 0
+
+var acc: u8 = 1
+acc &= mask
+acc |= flags
+acc ~= mask
+acc <<= 1
+acc >>= 1
+
+// Neighbours that must NOT be mistaken for shifts or bitwise ops:
+let cmp = flags < mask
+let cmp2 = flags <= mask
+let both = flags < mask && mask > 0
+let order = flags <=> mask          // spaceship, one comparison operator
+let nested: Maybe<Result<i64, string>> = None   // the closing `>>` is a known
+                                                 // false positive: it paints as
+                                                 // a shift, as in most editors

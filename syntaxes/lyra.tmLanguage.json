@@ -237,8 +237,9 @@
 					"match": "\\.\\.\\."
 				},
 				{
+					"comment": "The four end operators: ..< ..<= ascend, ..> ..>= descend. The operator is a separate token after `..` in the grammar, so it is optional here too — a bare `..` is the open-ended form (`range(0..)`, the pattern `10..`). Longer alternatives first, or ..<= would match as ..< plus a stray =. Must stay ahead of the comparison rule so the < is not painted as a comparison; it already is, since this matches at the earlier `.`.",
 					"name": "keyword.operator.range.lyra",
-					"match": "\\.\\.(=)?"
+					"match": "\\.\\.(<=|>=|<|>)?"
 				},
 				{
 					"name": "keyword.operator.compose.lyra",
@@ -257,6 +258,11 @@
 					"match": "\\?"
 				},
 				{
+					"comment": "Shifts, split out from the bitwise rule below so they can sit AHEAD of comparison — otherwise a single < wins the tie at the same position and << paints as two comparisons. It cannot simply be the whole bitwise rule moved up: | would then beat the logical || the same way. Compound <<= / >>= are matched by the first rule in this list, which outranks both. Cost: the >> closing a nested generic (Maybe<Result<i64, string>>) paints as a shift — unavoidable without a parser, and it painted as two comparisons before.",
+					"name": "keyword.operator.shift.lyra",
+					"match": "(<<|>>)"
+				},
+				{
 					"name": "keyword.operator.comparison.lyra",
 					"match": "(<=>|==|!=|<=|>=|<|>)"
 				},
@@ -265,9 +271,9 @@
 					"match": "(&&|\\|\\||!)"
 				},
 				{
-					"comment": "Bitwise and shift. After the logical rule so && and || win, and before any single < / > so the shifts are not split. Bitwise & is left to the address-of rule below — same character, and both render as an operator. Xor is ~, which doubles as the prefix complement.",
+					"comment": "Bitwise or and xor. Must stay AFTER the logical rule so || is not split into two |. The shifts cannot live here for the mirror-image reason — see the shift rule above comparison. Bitwise & is left to the address-of rule below — same character, and both render as an operator. Xor is ~, which doubles as the prefix complement.",
 					"name": "keyword.operator.bitwise.lyra",
-					"match": "(<<|>>|\\||~)"
+					"match": "(\\||~)"
 				},
 				{
 					"name": "keyword.operator.arrow.lyra",

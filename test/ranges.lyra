@@ -1,6 +1,16 @@
-for i in 1..=10 { } // ok: inclusive range
+// Every end operator, for eyeballing highlighting: `..<` `..<=` ascend,
+// `..>` `..>=` descend; `<`/`>` exclude the end bound, `<=`/`>=` include it.
+// The whole operator should paint as one, with no stray comparison inside it.
 
-for i in 1..<10 { } // ok: exclusive range
+for i in 1..<10 { }  // ok: ascending, end excluded
+
+for i in 1..<=10 { } // ok: ascending, end included
+
+for i in 10..>1 { }  // ok: descending, end excluded
+
+for i in 10..>=1 { } // ok: descending, end included
+
+for i in 0..<10:2 { } // ok: an ascending range with a step
 
 for x in [1, 2, 3] { } // ok: iterating over an array
 
@@ -11,29 +21,28 @@ for c in s { } // ok: iterating over characters in a string variable
 
 let start: i64 = 1
 let end: i64 = 5
-for i in start..=end { } // ok: range with integer variables
+for i in start..<=end { } // ok: range with integer variables
 
 for x in 42 { } // error: cannot iterate over non-iterable type
 
 for x in 3.14 { } // error: cannot iterate over non-iterable type
 
-for i in "a"..=10 { } // error: cannot compare string and integer
+for i in "a"..<=10 { } // error: cannot compare string and integer
 
 for i in (1, 2, 3) { } // error: cannot iterate over a tuple
 
 let n: i64 = 5
 for x in n { } // error: cannot iterate over non-iterable type
 
-for i in "a"..=10 { } // error: cannot compare string and integer
-for i in 1..="z" { } // error: cannot compare integer and string
+for i in 1..<="z" { } // error: cannot compare integer and string
 
-for i in true..=10 { } // error: cannot compare boolean and integer
-for i in 1..=true { } // error: cannot compare integer and boolean
+for i in true..<=10 { } // error: cannot compare boolean and integer
+for i in 1..<=true { } // error: cannot compare integer and boolean
 
 let a: i32 = 0
 let b: f64 = 10.0
-for i in a..=b { } // error: cannot compare integer and float   
-for i in b..=a { } // error: cannot compare float and integer
+for i in a..<=b { } // error: cannot compare integer and float
+for i in b..>=a { } // error: cannot compare float and integer
 
 let st: string = "hello"
-for i in st..=10 { } // error: cannot compare string and integer
+for i in st..<=10 { } // error: cannot compare string and integer
