@@ -71,7 +71,9 @@ To test the extension locally, press **F5** in VS Code with this folder open (la
 
 ## Relationship to Other Sub-Projects
 
-- **`lyra/`** (Go) — builds the `lyra-lsp` binary this extension spawns. After changing the Go code, rebuild with `go build ./cmd/lyra-lsp` and ensure the binary is on `$PATH` or pointed to by the setting.
+- **`lyra/`** (Go) — builds the `lyra-lsp` binary this extension spawns. After changing the Go code, rebuild with `./build.sh` (not a bare `go build`: the script also symlinks `std/` beside the binaries, which is how the prelude is found) and ensure the binary is on `$PATH` or pointed to by the setting.
+
+  The same build produces `lyrac`, the compiler CLI — `lyrac check` for diagnostics, `lyrac build` for a native executable, `lyrac run` to build and execute in one step (08/06). **The extension contributes no build or run task**, deliberately: it is a language client, and compiling is a terminal command. Worth knowing when a user reports "it type-checks in the editor but I can't run it" — there is nothing in the editor to run it with.
 - **`tree-sitter-lyra/`** — the grammar used by the Go parser. No direct dependency from this extension; syntax highlighting uses the separate TextMate grammar.
 
 ## Server path resolution

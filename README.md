@@ -24,11 +24,27 @@ You need the **`lyra-lsp`** binary. Build it from the Go project:
 
 ```bash
 cd ../lyra
-go build ./cmd/lyra-lsp
+./build.sh
 ```
 
-Then either put the resulting `lyra-lsp` on your `$PATH`, or point the extension
-at it with the setting below.
+That writes `build/lyra-lsp` (and `build/lyrac`) with `std/` symlinked beside
+them, which is how the standard library is found — a `lyra-lsp` copied somewhere
+on its own, with no `std/` next to it, cannot resolve the prelude. Point the
+extension at `build/lyra-lsp` with the setting below, or put it on your `$PATH`.
+
+## Compiling and running Lyra programs
+
+The extension is an editor client only — it reports diagnostics as you type but
+contributes no build task. Use the compiler CLI, `lyrac`, from a terminal:
+
+```bash
+lyrac check prog.lyra   # diagnostics only, no output file
+lyrac build prog.lyra   # compile to a native executable (./prog)
+lyrac run prog.lyra     # build to a temp location and execute it
+```
+
+`lyrac build` links with `clang`, so a C toolchain must be installed; `lyrac
+build --emit-llvm` stops at the LLVM IR and needs none.
 
 ## Extension settings
 
