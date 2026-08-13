@@ -61,8 +61,14 @@
 		"comments": {
 			"patterns": [
 				{
+					"comment": "A divider rule (four or more slashes) is an ordinary comment, not documentation. It must come FIRST: `///.*$` would otherwise match `////////` and paint a section rule as a doc comment — the same reading the tree-sitter grammar goes out of its way to refuse (see include/comments.js, where `comment` outbids `doc_comment` at prec 2 for exactly this input).",
+					"name": "comment.line.double-slash.lyra",
+					"match": "////.*$"
+				},
+				{
+					"comment": "`///` documents the declaration below it and `//!` documents the enclosing module. Both are comment.line.documentation, which is the scope themes style as documentation; the two differ in what they attach to, not in how they read.",
 					"name": "comment.line.documentation.lyra",
-					"match": "///.*$"
+					"match": "(///|//!).*$"
 				},
 				{
 					"name": "comment.line.double-slash.lyra",

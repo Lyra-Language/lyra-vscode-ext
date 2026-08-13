@@ -40,7 +40,7 @@ The extension contributes one VS Code setting:
 ## Syntax Highlighting (`syntaxes/lyra.tmLanguage.json`)
 
 TextMate grammar — not generated from tree-sitter. Covers:
-- Comments: `//`, `///` (doc), `/* */` (nested)
+- Comments: `//`, `///` (documents the declaration below it), `//!` (documents the enclosing module), `/* */` (nested). **`////` and longer must be matched first**, as an ordinary comment: it is a divider rule, and `///.*$` would otherwise paint a section rule as documentation. The tree-sitter grammar goes to the same trouble for the same input (`include/comments.js`, where `comment` outbids `doc_comment` at `prec(2)`), so the two highlighters agree about what a rule of slashes is.
 - Attributes: `@name`, `@name(args)`
 - Keywords: `if`, `else`, `for`, `match`, `return`, `break`, `continue`, `with`, `given`, `import`, `module`, `as`, `var`, `let`, `const`, `impl`, `trait`, `struct`, `data`, `tuple`, `newtype`, `where`, `async`, `await`, `yield`, `unsafe`, `pure`, `gen`, `rec`
 - `type` (type aliases) — **matched only when followed by a PascalCase name.** `type` is not reserved in Lyra; the tree-sitter grammar makes it a keyword only in declaration position, so `let type = 5` is a legal binding and a bare `\btype\b` would paint it as a keyword. The lookahead is what separates the two.
