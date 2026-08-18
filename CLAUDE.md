@@ -48,11 +48,11 @@ TextMate grammar — not generated from tree-sitter. Covers:
 - Storage types: `i8`–`i128`, `u8`–`u128`, `f16`/`f32`/`f64`, `string`, `bool`, `rune`, `fixed`, `void`. Kept in step with tree-sitter-lyra's `_primitive_type`: `int`/`uint` are gone (the language dropped platform-dependent widths for determinism), `float` was never a keyword, `Void` is spelled lowercase, and `never` — the bottom type — is compiler-internal with no syntax, so it is deliberately absent.
 - Storage modifiers: `stack`, `shared`, `weak`, `mut`, `ref`, `own`, `pub`
 - Operators: arithmetic, comparison, logical, range, compose (`->>`), null-coalesce (`??`), try (`?`), deref (`^`), address-of (`&`)
-- Range operators: `..<` `..<=` (ascending) and `..>` `..>=` (descending), plus a bare `..` for the open-ended forms (`range(0..)`, the pattern `10..`) — one rule, `\.\.(<=|>=|<|>)?`. The end operator is a **separate token after `..`** in the tree-sitter grammar (`rangeBounds`, `include/helpers.js`), which is why it is optional here too. Two ordering constraints hold it in place: the longer alternatives come first, or `..<=` matches as `..<` plus a stray `=`; and the rule must stay ahead of the comparison rule, which it is by matching at the earlier `.`. This said `..`/`..=` until 08/06, three days after the language replaced `..=` with `..<=` (08/04) — so `0..<10` painted as a range followed by a *comparison* `<`, the same class of stale-highlighting bug as the `r/…/` regex rule below.
+- Range operators: `..<` `..<=` (ascending) and `..>` `..>=` (descending), plus a bare `..` for the open-ended forms (`range(0..)`, the pattern `10..`) — one rule, `\.\.(<=|>=|<|>)?`. The end operator is a **separate token after `..`** in the tree-sitter grammar (`rangeBounds`, `include/helpers.js`), which is why it is optional here too. Two ordering constraints hold it in place: the longer alternatives come first, or `..<=` matches as `..<` plus a stray `=`; and the rule must stay ahead of the comparison rule, which it is by matching at the earlier `.`. **A range spelling that falls behind the language paints as a range plus a stray comparison**, which is this file's recurring failure mode.
 - Bitwise and shift: `<<` `>>` (own rule, `keyword.operator.shift.lyra`), `|`, `~` (xor, and the same token as the prefix complement). `&` is left to the address-of rule — one character, two meanings, and both render as an operator.
 - String interpolation: `${...}` inside double-quoted strings
 - Raw strings: backtick variants (`` ` ``, `` #` ``, `` ##` ``)
-- Regex literals: `r"pattern"`. A single line-bounded `match`, not begin/end, so an unterminated literal degrades to a stray identifier instead of swallowing the file. This rule matched `r/…/` until 07/31, long after the language moved off it on 07/29 — and it was not merely stale but *wrong*: `let ratio = r/2 + a/b` painted a string from `r/` to the next `/`, reproducing in the editor the exact ambiguity the language change removed.
+- Regex literals: `r"pattern"`. A single line-bounded `match`, not begin/end, so an unterminated literal degrades to a stray identifier instead of swallowing the file. The old `r/…/` spelling must not come back: `let ratio = r/2 + a/b` paints a string from `r/` to the next `/`, reproducing in the editor the exact ambiguity the language change removed.
 - Numeric literals: decimal, hex (`0x`), binary (`0b`), octal (`0o`)
 - Type names: any `PascalCase` identifier
 
@@ -70,8 +70,8 @@ in `operators` overlap at the same position, and their constraints form a cycle:
 No ordering satisfies all three, which is why **the shifts are their own rule** ahead of
 comparison while `\|`/`~` stay after logical. Moving them back together silently re-breaks
 whichever end you move them to — silently because every one of these scopes begins
-`keyword.operator`, so most themes paint the wrong answer the same color as the right one.
-That is how `<<` sat mis-scoped with a comment claiming otherwise until 08/06.
+`keyword.operator`, so most themes paint the wrong answer the same color as the right one,
+and a mis-scoped operator can sit for weeks under a comment claiming otherwise.
 
 The residue: the `>>` closing a nested generic (`Maybe<Result<i64, string>>`) paints as a
 shift. Unavoidable without a parser — it was two comparisons before, equally wrong — and
@@ -99,7 +99,7 @@ To test the extension locally, press **F5** in VS Code with this folder open (la
 
 - **`lyra/`** (Go) — builds the `lyra-lsp` binary this extension spawns. After changing the Go code, rebuild with `./build.sh` (not a bare `go build`: the script also symlinks `std/` beside the binaries, which is how the prelude is found) and ensure the binary is on `$PATH` or pointed to by the setting.
 
-  The same build produces `lyrac`, the compiler CLI — `lyrac check` for diagnostics, `lyrac build` for a native executable, `lyrac run` to build and execute in one step (08/06). **The extension contributes no build or run task**, deliberately: it is a language client, and compiling is a terminal command. Worth knowing when a user reports "it type-checks in the editor but I can't run it" — there is nothing in the editor to run it with.
+  The same build produces `lyrac`, the compiler CLI — `check`, `build` (a native executable) and `run`. **The extension contributes no build or run task**, deliberately: it is a language client, and compiling is a terminal command. Worth knowing when a user reports "it type-checks in the editor but I can't run it" — there is nothing in the editor to run it with.
 - **`tree-sitter-lyra/`** — the grammar used by the Go parser. No direct dependency from this extension; syntax highlighting uses the separate TextMate grammar.
 
 ## Server path resolution
