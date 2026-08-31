@@ -159,8 +159,9 @@
 			"end": "\"",
 			"patterns": [
 				{
+					"comment": "The escape set is the grammar's, and the two must be kept together: tree-sitter-lyra's include/literals/char.js for runes, and pkg/analyzer/collector/expressions/string_literal.go's unescapeStringContent for strings — one decoder serves both. This rule had drifted, matching only [nrtfb\\\\\"'] and so leaving \\a, \\e, \\v, \\oNNN and \\# unpainted; \\0 (NUL, 08/30) is added here rather than to a list that was already short.",
 					"name": "constant.character.escape.lyra",
-					"match": "\\\\(x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|[nrtfb\\\\\"'])"
+					"match": "\\\\(o[0-7]{3}|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|[0abefnrtv\\\\\"'#])"
 				},
 				{
 					"name": "meta.template.expression.lyra",
