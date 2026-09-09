@@ -145,7 +145,7 @@
 			"patterns": [
 				{
 					"name": "constant.language.lyra",
-					"match": "\\b(true|false)\\b"
+					"match": "\\b(true|false|nullptr)\\b"
 				},
 				{
 					"name": "variable.language.lyra",
