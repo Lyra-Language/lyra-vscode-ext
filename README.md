@@ -1,72 +1,56 @@
 # Lyra for VS Code
 
-The official Visual Studio Code extension for the [Lyra](../lyra) programming
-language. It provides syntax highlighting and connects the editor to the Lyra
-language server for rich language features.
+The official VS Code extension for the [Lyra](../lyra) programming language.
 
 > **Status:** pre-release (v0.0.1), tracking the language as it evolves.
 
 ## Features
 
-- **Syntax highlighting** for `.lyra` files (TextMate grammar in
-  `syntaxes/lyra.tmLanguage.json`), plus bracket matching, comment toggling, and
-  auto-closing pairs (`language-configuration.json`).
-- **Language server features** via the `lyra-lsp` binary: completion, hover,
-  go-to-definition, find references, rename, semantic tokens, folding ranges,
-  inlay hints, document/workspace symbols, signature help, and diagnostics.
-
-The extension itself is a thin LSP client — almost all language intelligence
-lives in `lyra-lsp`, built from the sibling [`lyra/`](../lyra) Go project.
+- **Syntax highlighting** for `.lyra` (TextMate grammar), bracket matching, comment toggling
+  and auto-closing pairs.
+- **Language server features** via `lyra-lsp`: completion, hover, go-to-definition,
+  references, rename, semantic tokens, folding, inlay hints, symbols, signature help and
+  diagnostics.
 
 ## Requirements
 
-You need the **`lyra-lsp`** binary. Build it from the Go project:
+Build `lyra-lsp` from the Go project:
 
 ```bash
 cd ../lyra
 ./build.sh
 ```
 
-That writes `build/lyra-lsp` (and `build/lyrac`) with `std/` symlinked beside
-them, which is how the standard library is found — a `lyra-lsp` copied somewhere
-on its own, with no `std/` next to it, cannot resolve the prelude. Point the
-extension at `build/lyra-lsp` with the setting below, or put it on your `$PATH`.
-
-## Compiling and running Lyra programs
-
-The extension is an editor client only — it reports diagnostics as you type but
-contributes no build task. Use the compiler CLI, `lyrac`, from a terminal:
-
-```bash
-lyrac check prog.lyra   # diagnostics only, no output file
-lyrac build prog.lyra   # compile to a native executable (./prog)
-lyrac run prog.lyra     # build to a temp location and execute it
-```
-
-`lyrac build` links with `clang`, so a C toolchain must be installed; `lyrac
-build --emit-llvm` stops at the LLVM IR and needs none.
-
-## Extension settings
+This writes `build/lyra-lsp` and `build/lyrac` with `std/` symlinked beside them — a
+`lyra-lsp` copied elsewhere on its own cannot find the prelude. Point
+`lyra.languageServerPath` at `build/lyra-lsp` (`${workspaceFolder}` is supported), or put it
+on `$PATH`.
 
 | Setting | Default | Description |
 |---|---|---|
-| `lyra.languageServerPath` | `""` (→ `lyra-lsp` on `$PATH`) | Absolute path to the `lyra-lsp` binary |
+| `lyra.languageServerPath` | `""` (→ `lyra-lsp` on `$PATH`) | Path to the `lyra-lsp` binary |
+
+## Compiling and running Lyra programs
+
+The extension contributes no build task. Use `lyrac` from a terminal:
+
+```bash
+lyrac check prog.lyra   # diagnostics only
+lyrac build prog.lyra   # native executable (./prog); needs clang
+lyrac run prog.lyra     # build to a temp location and execute
+```
+
+`lyrac build --emit-llvm` stops at LLVM IR and needs no C toolchain.
 
 ## Developing
 
 ```bash
 npm install
-npm run compile      # one-shot TypeScript build → dist/
+npm run compile      # one-shot build → dist/
 npm run watch        # rebuild on change
 ```
 
-To try it out, open this folder in VS Code and press **F5** to launch an
-Extension Development Host with the extension loaded. Open a `.lyra` file; make
-sure `lyra-lsp` is on your `$PATH` or configured via `lyra.languageServerPath`.
-
-The entire extension is `src/extension.ts` (`activate` spawns the language server
-over stdio and registers the client for the `lyra` language). See
-[`CLAUDE.md`](CLAUDE.md) for more detail.
+Press **F5** in VS Code to launch an Extension Development Host. See [`CLAUDE.md`](CLAUDE.md).
 
 ## License
 
