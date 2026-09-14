@@ -83,6 +83,21 @@ generics paints as a shift.
 
 **Check changes against `test/bitwise.lyra` and `test/ranges.lyra`.**
 
+### Embedded GLSL
+
+`#embedded-glsl` paints a `` /* glsl */ `…` `` raw string's content with `source.glsl`
+(`embeddedLanguages` in `package.json` maps `meta.embedded.block.glsl` → `glsl`). Same rule as
+`tree-sitter-lyra/queries/injections.scm`.
+
+- Listed **ahead of `#comments`**, top level and in `#function-parameters`: both start at `/*`,
+  and the first-listed rule wins the tie.
+- The marker and the opening backtick must share a line (a `begin` can't span lines).
+- The closer repeats the opener's `#`s through a back-reference (`\3`).
+- No GLSL grammar ships here. Without one installed (e.g. *Shader languages support*), the content
+  is unstyled.
+- `#function-parameters` (every `(…)`) also includes `#raw-strings`. Without it, a raw string
+  argument went unpainted and a `)` inside one closed the parens.
+
 ## Relationship to Other Sub-Projects
 
 - **`lyra/`** — rebuild `lyra-lsp` with `./build.sh` (not bare `go build`: it symlinks `std/`

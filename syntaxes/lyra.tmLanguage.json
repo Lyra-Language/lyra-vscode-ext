@@ -3,6 +3,9 @@
 	"name": "Lyra",
 	"patterns": [
 		{
+			"include": "#embedded-glsl"
+		},
+		{
 			"include": "#comments"
 		},
 		{
@@ -189,6 +192,30 @@
 			"name": "string.quoted.single.lyra",
 			"match": "'(\\\\(x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|[nrtfb\\\\\"'])|[^'\\\\])'"
 		},
+		"embedded-glsl": {
+			"comment": "A raw string marked /* glsl */ is GLSL (tree-sitter-lyra's queries/injections.scm is the same rule). It must be listed ahead of #comments: both start at the /*, and TextMate gives a tie to the first rule. The closer repeats the opener's # count through the \\3 back-reference. The marker and the string must share a line — a TextMate begin cannot span two. Painting the content needs a grammar providing source.glsl (e.g. the Shader languages support extension); without one it is unstyled, not string-coloured.",
+			"begin": "(/\\*\\s*glsl\\s*\\*/)\\s*((#*)`)",
+			"beginCaptures": {
+				"1": {
+					"name": "comment.block.lyra"
+				},
+				"2": {
+					"name": "string.quoted.other.lyra"
+				}
+			},
+			"end": "(`\\3)",
+			"endCaptures": {
+				"1": {
+					"name": "string.quoted.other.lyra"
+				}
+			},
+			"contentName": "meta.embedded.block.glsl",
+			"patterns": [
+				{
+					"include": "source.glsl"
+				}
+			]
+		},
 		"raw-strings": {
 			"patterns": [
 				{
@@ -321,6 +348,9 @@
 			"end": "\\)",
 			"patterns": [
 				{
+					"include": "#embedded-glsl"
+				},
+				{
 					"include": "#comments"
 				},
 				{
@@ -334,6 +364,9 @@
 				},
 				{
 					"include": "#strings"
+				},
+				{
+					"include": "#raw-strings"
 				},
 				{
 					"include": "#numeric-literals"
