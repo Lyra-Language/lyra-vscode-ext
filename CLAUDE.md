@@ -8,6 +8,7 @@ hand-written TextMate grammar.
 ```
 src/extension.ts               — the entire extension (activate/deactivate)
 syntaxes/lyra.tmLanguage.json  — TextMate grammar (not generated from tree-sitter)
+syntaxes/glsl.tmLanguage.json  — bundled GLSL for `/* glsl */` raw strings (MIT, LICENSE-GLSL)
 language-configuration.json    — brackets, comment tokens, auto-close
 test/*.lyra                    — samples for eyeballing highlighting/LSP
 dist/                          — tsc output (gitignored)
@@ -85,16 +86,18 @@ generics paints as a shift.
 
 ### Embedded GLSL
 
-`#embedded-glsl` paints a `` /* glsl */ `…` `` raw string's content with `source.glsl`
-(`embeddedLanguages` in `package.json` maps `meta.embedded.block.glsl` → `glsl`). Same rule as
+`#embedded-glsl` paints a `` /* glsl */ `…` `` raw string's content with the bundled
+`syntaxes/glsl.tmLanguage.json` (from stef-levesque/vscode-shader, MIT). Same rule as
 `tree-sitter-lyra/queries/injections.scm`.
+
+- The bundle's scope is **private, `source.glsl.lyra`**, and it contributes no language or file
+  extension. It can't collide with a GLSL extension the user installs, and never claims
+  `.glsl` files. Converted from plist unchanged apart from the scope name.
 
 - Listed **ahead of `#comments`**, top level and in `#function-parameters`: both start at `/*`,
   and the first-listed rule wins the tie.
 - The marker and the opening backtick must share a line (a `begin` can't span lines).
 - The closer repeats the opener's `#`s through a back-reference (`\3`).
-- No GLSL grammar ships here. Without one installed (e.g. *Shader languages support*), the content
-  is unstyled.
 - `#function-parameters` (every `(…)`) also includes `#raw-strings`. Without it, a raw string
   argument went unpainted and a `)` inside one closed the parens.
 

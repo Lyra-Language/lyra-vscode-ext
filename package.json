@@ -47,10 +47,11 @@
       {
         "language": "lyra",
         "scopeName": "source.lyra",
-        "path": "./syntaxes/lyra.tmLanguage.json",
-        "embeddedLanguages": {
-          "meta.embedded.block.glsl": "glsl"
-        }
+        "path": "./syntaxes/lyra.tmLanguage.json"
+      },
+      {
+        "scopeName": "source.glsl.lyra",
+        "path": "./syntaxes/glsl.tmLanguage.json"
       }
     ],
     "configuration": {

@@ -7,7 +7,8 @@ The official VS Code extension for the [Lyra](../lyra) programming language.
 ## Features
 
 - **Syntax highlighting** for `.lyra` (TextMate grammar), bracket matching, comment toggling
-  and auto-closing pairs.
+  and auto-closing pairs. A raw string marked `/* glsl */` is highlighted as GLSL (grammar
+  bundled, from stef-levesque/vscode-shader, MIT; see `LICENSE-GLSL`).
 - **Language server features** via `lyra-lsp`: completion, hover, go-to-definition,
   references, rename, semantic tokens, folding, inlay hints, symbols, signature help and
   diagnostics.
