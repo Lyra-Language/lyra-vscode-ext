@@ -12,6 +12,9 @@ The official VS Code extension for the [Lyra](../lyra) programming language.
 - **Language server features** via `lyra-lsp`: completion, hover, go-to-definition,
   references, rename, semantic tokens, folding, inlay hints, symbols, signature help and
   diagnostics.
+- **Formatting** — `Format Document` (and format-on-save) runs `lyrafmt`, the formatter
+  written in Lyra, through the language server. It needs no setting here: the server finds
+  the binary, and a machine without one simply has no formatting.
 
 ## Requirements
 
@@ -30,6 +33,24 @@ on `$PATH`.
 | Setting | Default | Description |
 |---|---|---|
 | `lyra.languageServerPath` | `""` (→ `lyra-lsp` on `$PATH`) | Path to the `lyra-lsp` binary |
+
+### Formatting
+
+`./build.sh` builds `build/lyrafmt` beside the server when the machine can (a C compiler,
+`libtree-sitter` — `brew install tree-sitter` or `apt install libtree-sitter-dev` — and the
+`tree-sitter-lyra` checkout). The server looks for it at `$LYRA_FMT`, then on `$PATH`, then
+beside itself, so nothing needs configuring here. Format-on-save is VS Code's own setting:
+
+```json
+{
+  "[lyra]": {
+    "editor.formatOnSave": true
+  }
+}
+```
+
+With no `lyrafmt` on the machine, `Format Document` does nothing rather than reporting an
+error — the buffer is never half-formatted.
 
 ## Compiling and running Lyra programs
 

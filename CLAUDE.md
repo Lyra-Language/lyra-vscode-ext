@@ -16,6 +16,10 @@ dist/                          — tsc output (gitignored)
 
 No test suite.
 
+**Formatting is the server's**, not this extension's: `lyra-lsp` implements
+`textDocument/formatting` by running `lyrafmt`, so `Format Document` needs no client code
+here and no setting. See `lyra/cmd/lyra-lsp/README.md`.
+
 ## Commands
 
 ```bash
