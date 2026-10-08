@@ -50,7 +50,7 @@ expansion is returned so the error names a real path. `lyra.code-workspace` ship
 
 Covers comments, attributes (`@name`, `@name(args)`), keywords, storage types/modifiers,
 operators, interpolation `${…}`, raw strings (`` ` ``, `` #` ``, `` ##` ``), `r"…"` regex,
-numeric literals (dec/`0x`/`0b`/`0o`), PascalCase type names. Keywords: `if else for match
+numeric literals (dec/`0x`/`0b`/`0o`), PascalCase type names. Keywords: `if else loop while for match
 return break continue with given import module as var let const impl trait struct data tuple
 newtype where async await yield unsafe pure gen rec`. Operators include compose `->>`, `??`,
 try `?`, deref `^`, address-of `&`. Constraints to preserve:
@@ -58,7 +58,7 @@ try `?`, deref `^`, address-of `&`. Constraints to preserve:
 - **Comments:** `////`+ must match first as an ordinary comment (divider), before `///.*$`
   (doc). `//!` is a module doc; `/* */` nests. Matches the grammar's `include/comments.js`.
 - **`type`** is a keyword only when followed by a PascalCase name — `let type = 5` is legal.
-- **`;`** — one scope for statement separator, C-style `for`, and `[value; count]`.
+- **`;`** — one scope for statement separator and `[value; count]`.
 - **Storage types** track tree-sitter-lyra's `_primitive_type`: `i8`–`i128`, `u8`–`u128`,
   `f16`/`f32`/`f64`, `string`, `bool`, `rune`, `fixed`, `void`. No `int`/`uint`/`float`;
   `never` has no syntax and is deliberately absent. Modifiers: `stack`, `shared`, `weak`,

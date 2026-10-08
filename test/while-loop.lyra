@@ -1,0 +1,12 @@
+let done: bool = false
+while done == false { } // ok: using a boolean variable in the while condition
+
+loop { break } // ok: runs until a break
+
+let a: i64 = 1
+let b: bool = true
+while a && b { } // error: both operands of logical AND must be boolean
+
+let r: bool = true
+let s: string = "x"
+while r || s { } // error: both operands of logical OR must be boolean

@@ -20,7 +20,7 @@ let double = (x: i64, y: i64) -> i64 => {
 
 let counter = gen (start: i32) -> Gen<i32> => {
   var i = start
-  for {
+  loop {
     yield i
     i += 1
   }
@@ -171,7 +171,7 @@ var pipeline = parse ->> validate ->> serialize
 // Basic generator example
 let counter = gen (start: i32) -> Gen<i32> => {
   var i = start
-  for {
+  loop {
     yield i
     i += 1
   }

@@ -23,13 +23,10 @@ let main = () -> u8 => {
   let a = 1; let b = 2
   let p = Pt { x: 3, y: 4 }
 
-  // The same token in a C-style `for` and in an array repeat.
-  for var i = 0; i < 3; i += 1 {
-    print("${i}")
-  }
+  // The same token in an array repeat.
   // note: `[value; count]` parses and highlights, but does not type-check yet
   // ("unknown expression type ArrayRepeatExpr") — kept so the `;` in an array
-  // repeat is visible here, since that is one of the three places it appears.
+  // repeat is visible here, since that is one of the two places it appears.
   let zeros = [0; 4]
 
   u8(apply(((x, y)) => x * y, (a, b)) + p.x)

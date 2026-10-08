@@ -55,7 +55,7 @@
 		"punctuation": {
 			"patterns": [
 				{
-					"comment": "The statement separator. A line break is the ordinary terminator in Lyra; `;` is the explicit form, for putting several statements on one line. The same token also separates the clauses of a C-style `for i = 0; i < n; i += 1` and the parts of an array repeat `[value; count]` — one scope for all three, as C and JavaScript grammars do.",
+					"comment": "The statement separator. A line break is the ordinary terminator in Lyra; `;` is the explicit form, for putting several statements on one line. The same token also separates the parts of an array repeat `[value; count]` — one scope for both, as C and JavaScript grammars do.",
 					"name": "punctuation.terminator.statement.lyra",
 					"match": ";"
 				}
@@ -110,7 +110,7 @@
 			"patterns": [
 				{
 					"name": "keyword.control.lyra",
-					"match": "\\b(if|else|for|in|match|return|break|continue|with|given)\\b"
+					"match": "\\b(if|else|loop|while|for|in|match|return|break|continue|with|given)\\b"
 				},
 				{
 					"name": "keyword.control.import.lyra",
