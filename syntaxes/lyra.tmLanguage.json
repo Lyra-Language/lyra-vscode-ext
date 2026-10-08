@@ -118,12 +118,12 @@
 				},
 				{
 					"name": "keyword.other.lyra",
-					"match": "\\b(var|let|const|impl|trait|struct|union|data|tuple|newtype|where|async|await|yield|unsafe|pure|gen|rec)\\b"
+					"match": "\\b(var|let|const|impl|trait|struct|union|data|tuple|where|async|await|yield|unsafe|pure|gen|rec)\\b"
 				},
 				{
-					"comment": "The `type` of a type alias (`type Op = ((i64, i64)) -> i64`). Kept out of the list above and gated on a following PascalCase name because `type` is NOT reserved in Lyra — the tree-sitter grammar makes it a keyword only in this position, so `let type = 5` is a legal binding and must not be painted as a keyword. An alias always names an uppercase type, so the lookahead separates the two with no false positives.",
+					"comment": "`type` (a nominal type, `type Meters = f64`) and `alias` (a transparent one, `alias Op = ((i64, i64)) -> i64`) — the keywords were `newtype` and `type` until 10/08. Kept out of the list above and gated on a following PascalCase name because neither is reserved in Lyra — the tree-sitter grammar makes each a keyword only where a declaration starts, so `let type = 5` and a parameter named `alias` are legal bindings and must not be painted as keywords. A declaration always names an uppercase type, so the lookahead separates the two with no false positives.",
 					"name": "keyword.other.type.lyra",
-					"match": "\\btype\\b(?=\\s+[A-Z])"
+					"match": "\\b(type|alias)\\b(?=\\s+[A-Z])"
 				}
 			]
 		},

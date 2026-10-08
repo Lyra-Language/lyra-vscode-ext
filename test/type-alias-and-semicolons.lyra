@@ -2,11 +2,11 @@
 // there is no automated grammar test.
 
 // `type` is a keyword here, and colours like `newtype` below it.
-type Op = ((i64, i64)) -> i64
-pub type Id = i64
-type Point = Pt
+alias Op = ((i64, i64)) -> i64
+pub alias Id = i64
+alias Point = Pt
 
-newtype Volume = u8 where range(0..<=100) // `type` inside `newtype` must NOT colour
+type Volume = u8 where range(0..<=100) // `type` inside `newtype` must NOT colour
 
 struct Pt { x: i64, y: i64 }
 
