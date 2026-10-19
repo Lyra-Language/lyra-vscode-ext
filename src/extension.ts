@@ -50,7 +50,12 @@ export function activate(context: vscode.ExtensionContext): void {
     };
 
     const clientOptions: LanguageClientOptions = {
-        documentSelector: [{ scheme: 'file', language: 'lyra' }],
+        // `.lui` markup too: the server diagnoses it through the Lyra lui generates from it,
+        // at the markup's own lines.
+        documentSelector: [
+            { scheme: 'file', language: 'lyra' },
+            { scheme: 'file', language: 'lui' },
+        ],
     };
 
     client = new LanguageClient(

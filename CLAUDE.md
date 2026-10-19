@@ -112,7 +112,9 @@ generics paints as a shift.
 ## `.lui` markup
 
 Language `lui` (`.lui`, scope `source.lui`): the markup `lyra/tools/lui` generates into
-Lyra (`lyra/bindings/README.md`). Highlighting only — no server runs for it.
+Lyra (`lyra/bindings/README.md`). The client's document selector sends it to `lyra-lsp`,
+which publishes diagnostics at the markup's lines (it runs `lui` beside itself); nothing
+else the server offers answers on it.
 
 - **Tags by kind**, as `lyra-zed-ext/languages/lui/highlights.scm` colours them: capitalized
   → `entity.name.type` (an element), lowercase → `entity.name.function` (a component),
