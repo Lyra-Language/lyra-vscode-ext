@@ -9,7 +9,9 @@ hand-written TextMate grammar.
 src/extension.ts               — the entire extension (activate/deactivate)
 syntaxes/lyra.tmLanguage.json  — TextMate grammar (not generated from tree-sitter)
 syntaxes/glsl.tmLanguage.json  — bundled GLSL for `/* glsl */` raw strings (MIT, LICENSE-GLSL)
+syntaxes/lui.tmLanguage.json   — `.lui` markup (lyra/tools/lui), Lyra and CSS embedded
 language-configuration.json    — brackets, comment tokens, auto-close
+language-configuration-lui.json — the same for `.lui`
 test/*.lyra                    — samples for eyeballing highlighting/LSP
 dist/                          — tsc output (gitignored)
 ```
@@ -106,6 +108,26 @@ generics paints as a shift.
 - The closer repeats the opener's `#`s through a back-reference (`\3`).
 - `#function-parameters` (every `(…)`) also includes `#raw-strings`. Without it, a raw string
   argument went unpainted and a `)` inside one closed the parens.
+
+## `.lui` markup
+
+Language `lui` (`.lui`, scope `source.lui`): the markup `lyra/tools/lui` generates into
+Lyra (`lyra/bindings/README.md`). Highlighting only — no server runs for it.
+
+- **Tags by kind**, as `lyra-zed-ext/languages/lui/highlights.scm` colours them: capitalized
+  → `entity.name.type` (an element), lowercase → `entity.name.function` (a component),
+  `if`/`else`/`for` → `keyword.control`, `component`/`script`/`style` → `keyword.other.tag`.
+  The names are matched in a capture's own `patterns` with `\b`, never `^…$`: a capture's
+  patterns run against the whole line, so an anchor never matches.
+- **Embedded**: `{…}` (nested braces by `#code-braces`; a `}` in a Lyra string by
+  `source.lyra`'s string rule) and a `<script>`'s body are `source.lyra`; a `<style>`'s is
+  VS Code's built-in `source.css`. `embeddedLanguages` in `package.json` maps the
+  `meta.embedded.*` scopes, so comments and brackets inside follow the embedded language.
+- **A `<script>` or `<style>` opener is one `begin`** (its attributes re-scanned by a
+  capture), the body the rule's content: a `\G` sub-rule for the attributes matched again
+  at its own zero-width end.
+- Checked by tokenizing `lyra/examples/imgui/components_view.lui` with `vscode-textmate`
+  and the real Lyra and CSS grammars (no test suite here; the harness lives outside).
 
 ## Relationship to Other Sub-Projects
 

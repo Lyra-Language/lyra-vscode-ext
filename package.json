@@ -41,6 +41,17 @@
           ".lyra"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "lui",
+        "aliases": [
+          "Lui",
+          "lui"
+        ],
+        "extensions": [
+          ".lui"
+        ],
+        "configuration": "./language-configuration-lui.json"
       }
     ],
     "grammars": [
@@ -52,6 +63,16 @@
       {
         "scopeName": "source.glsl.lyra",
         "path": "./syntaxes/glsl.tmLanguage.json"
+      },
+      {
+        "language": "lui",
+        "scopeName": "source.lui",
+        "path": "./syntaxes/lui.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.lyra": "lyra",
+          "meta.embedded.inline.lyra": "lyra",
+          "meta.embedded.block.css": "css"
+        }
       }
     ],
     "configuration": {

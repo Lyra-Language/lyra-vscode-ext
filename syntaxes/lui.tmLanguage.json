@@ -1,0 +1,242 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Lui",
+  "scopeName": "source.lui",
+  "comment": "`.lui` markup for Lyra's bindings.imgui.ui (lyra/tools/lui). The Lyra in {…} and a <script>'s body are source.lyra; a <style>'s body is VS Code's own source.css. Tag colours follow lyra-zed-ext/languages/lui/highlights.scm: a capitalized tag is an element (a type), a lowercase one a component (a function), and if/else/for and component/script/style are keywords.",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#script"
+    },
+    {
+      "include": "#style"
+    },
+    {
+      "include": "#tag"
+    },
+    {
+      "include": "#code"
+    },
+    {
+      "include": "#entity"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.block.lui",
+      "begin": "<!--",
+      "end": "-->",
+      "captures": {
+        "0": {
+          "name": "punctuation.definition.comment.lui"
+        }
+      }
+    },
+    "script": {
+      "begin": "(<)(script)\\b([^>]*)(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.lui"
+        },
+        "2": {
+          "name": "keyword.other.tag.lui"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        "4": {
+          "name": "punctuation.definition.tag.end.lui"
+        }
+      },
+      "end": "(</)(script)\\s*(>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.lui"
+        },
+        "2": {
+          "name": "keyword.other.tag.lui"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.lui"
+        }
+      },
+      "contentName": "meta.embedded.block.lyra",
+      "patterns": [
+        {
+          "include": "source.lyra"
+        }
+      ]
+    },
+    "style": {
+      "begin": "(<)(style)\\b([^>]*)(>)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.lui"
+        },
+        "2": {
+          "name": "keyword.other.tag.lui"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#attribute"
+            }
+          ]
+        },
+        "4": {
+          "name": "punctuation.definition.tag.end.lui"
+        }
+      },
+      "end": "(</)(style)\\s*(>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.lui"
+        },
+        "2": {
+          "name": "keyword.other.tag.lui"
+        },
+        "3": {
+          "name": "punctuation.definition.tag.end.lui"
+        }
+      },
+      "contentName": "meta.embedded.block.css",
+      "patterns": [
+        {
+          "include": "source.css"
+        }
+      ]
+    },
+    "tag": {
+      "begin": "(</?)([A-Za-z_][A-Za-z0-9_-]*)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.lui"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#tag-name"
+            }
+          ]
+        }
+      },
+      "end": "(/?>)",
+      "endCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.end.lui"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#attribute"
+        }
+      ]
+    },
+    "tag-name": {
+      "patterns": [
+        {
+          "match": "\\b(if|else|for)\\b(?![-])",
+          "name": "keyword.control.lui"
+        },
+        {
+          "match": "\\b(component|script|style)\\b(?![-])",
+          "name": "keyword.other.tag.lui"
+        },
+        {
+          "match": "\\b[A-Z][A-Za-z0-9_-]*",
+          "name": "entity.name.type.lui"
+        },
+        {
+          "match": "\\b[a-z_][A-Za-z0-9_-]*",
+          "name": "entity.name.function.lui"
+        }
+      ]
+    },
+    "attribute": {
+      "patterns": [
+        {
+          "include": "#comment"
+        },
+        {
+          "match": "[A-Za-z_][A-Za-z0-9_-]*",
+          "name": "entity.other.attribute-name.lui"
+        },
+        {
+          "match": "=",
+          "name": "punctuation.separator.key-value.lui"
+        },
+        {
+          "name": "string.quoted.double.lui",
+          "begin": "\"",
+          "end": "\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.lui"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.lui"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#code"
+            },
+            {
+              "include": "#entity"
+            }
+          ]
+        },
+        {
+          "include": "#code"
+        }
+      ]
+    },
+    "code": {
+      "begin": "\\{",
+      "end": "\\}",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.begin.lui"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.end.lui"
+        }
+      },
+      "contentName": "meta.embedded.inline.lyra",
+      "patterns": [
+        {
+          "include": "#code-braces"
+        },
+        {
+          "include": "source.lyra"
+        }
+      ]
+    },
+    "code-braces": {
+      "begin": "\\{",
+      "end": "\\}",
+      "patterns": [
+        {
+          "include": "#code-braces"
+        },
+        {
+          "include": "source.lyra"
+        }
+      ]
+    },
+    "entity": {
+      "match": "&[A-Za-z0-9#]+;",
+      "name": "constant.character.entity.lui"
+    }
+  }
+}
