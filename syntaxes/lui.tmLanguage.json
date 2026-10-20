@@ -164,6 +164,9 @@
           "include": "#comment"
         },
         {
+          "include": "#props"
+        },
+        {
           "match": "[A-Za-z_][A-Za-z0-9_-]*",
           "name": "entity.other.attribute-name.lui"
         },
@@ -237,6 +240,47 @@
     "entity": {
       "match": "&[A-Za-z0-9#]+;",
       "name": "constant.character.entity.lui"
+    },
+    "props": {
+      "comment": "A component's props={{ name: Type = default, … }}: each name a parameter; the types and defaults Lyra.",
+      "begin": "\\b(props)\\s*(=)\\s*(\\{\\{)",
+      "beginCaptures": {
+        "1": {
+          "name": "entity.other.attribute-name.lui"
+        },
+        "2": {
+          "name": "punctuation.separator.key-value.lui"
+        },
+        "3": {
+          "name": "punctuation.section.embedded.begin.lui"
+        }
+      },
+      "end": "\\}\\}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.end.lui"
+        }
+      },
+      "contentName": "meta.embedded.inline.lyra",
+      "patterns": [
+        {
+          "match": "(?:^|(?<=\\{\\{)|(?<=,))\\s*([A-Za-z_][A-Za-z0-9_]*)\\s*(:)",
+          "captures": {
+            "1": {
+              "name": "variable.parameter.lui"
+            },
+            "2": {
+              "name": "punctuation.separator.lui"
+            }
+          }
+        },
+        {
+          "include": "#code-braces"
+        },
+        {
+          "include": "source.lyra"
+        }
+      ]
     }
   }
 }

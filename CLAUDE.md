@@ -125,6 +125,9 @@ else the server offers answers on it.
   `source.lyra`'s string rule) and a `<script>`'s body are `source.lyra`; a `<style>`'s is
   VS Code's built-in `source.css`. `embeddedLanguages` in `package.json` maps the
   `meta.embedded.*` scopes, so comments and brackets inside follow the embedded language.
+- **`props={{ … }}` is its own rule** (`#props`, ahead of the attribute name): a name
+  before a `:` at an entry's start is `variable.parameter`, nested braces stay balanced
+  (`#code-braces`), and the types and defaults are `source.lyra`.
 - **A `<script>` or `<style>` opener is one `begin`** (its attributes re-scanned by a
   capture), the body the rule's content: a `\G` sub-rule for the attributes matched again
   at its own zero-width end.
